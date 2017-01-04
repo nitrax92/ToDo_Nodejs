@@ -29,7 +29,6 @@ mongoose.connect(uristring, function (err, res) {
 
 
 // ============ Configuration ============
-
 // Static files for this project.
 app.use(express.static(__dirname + '/public'));
 
@@ -43,7 +42,11 @@ app.use(methodOverride());
 // set port for this app. port works as a variable.
 app.set('port', (process.env.PORT || 5000));
 
+// public content, everything frontend
 app.use(express.static(__dirname + '/public'));
+
+// Load md-data-table to static available content
+app.use('/static/md-data-table',express.static(__dirname + '/node_modules/md-data-table/dist'));
 
 /*
 var todoSchema = Schema({

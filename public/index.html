@@ -6,59 +6,129 @@
 
 
     <!-- Styling and Front-end framework -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
-    <style>
-        html {overflow-y: scroll}
-        body {padding-top: 50px;}
-        #todo-list{margin-bottom: 30px;}
+    <!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">load bootstrap -->
 
-    </style>
+    <link rel="stylesheet" href="siteStyle.css">
+
+    <!-- FONT -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+
+    <!-- Material Design Lite -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.brown-deep_orange.min.css" />
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 
     <!-- JavaScript -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
     <script src="core.js"></script>
 
+
+    <!-- md data table-->
+    <link rel="stylesheet" type="text/css" href="/static/md-data-table/md-data-table-style.css">
+    <script src="/static/md-data-table/md-data-table.js"></script>
+
+
+
+
 </head>
 <body ng-controller="mainController">
-<div class="container">
+    <div class="mdl-layout mdl-js-layout">
+        <main class="mdl-layout__content">
+            <div class="mdl-grid center-items">
+                <!-- Header -->
+                <div class="mdl-cell mdl-cell--3-col"></div>
+                <div class="mdl-cell mdl-cell--6-col" id="header-text"><h1><b>My To Do List</b></h1></div>
+                <div class="mdl-cell mdl-cell--3-col"></div>
 
-    <!-- HEADER AND TODO COUNT -->
-    <div class="jumbotron text-center">
-        <h1>I'm a Todo-aholic <span class="label label-info">{{ todos.length }}</span></h1>
+
+                <!-- The To Do List -->
+                <div class="mdl-cell mdl-cell--3-col"></div>
+                <div class="mdl-cell mdl-cell--6-col" id="todo-list">
+
+
+                    <ul class="mdl-list">
+                        <li class="mdl-list__item" ng-repeat="todo in todos">
+                            <span class="mdl-list__item-primary-content" ng-click="deleteTodo(todo._id)">
+                              {{todo.text}}
+                            </span>
+                            <!--
+                            <span class="mdl-list__item-secondary-action">
+                              <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="list-checkbox-1">
+                                <input type="checkbox" id="list-checkbox-1" class="mdl-checkbox__input" />
+                              </label>
+                            </span>
+                            -->
+                        </li>
+                    </ul>
+
+
+                    <span class="mdl-chip mdl-chip--deletable" ng-repeat="todo in todos">
+                        <span class="mdl-chip__text">{{todo.text}}</span>
+                        <button type="button" class="mdl-chip__action" ng-click="deleteTodo(todo._id)"><i class="material-icons">cancel</i></button>
+                    </span>
+                </div>
+                <div class="mdl-cell mdl-cell--3-col"></div>
+
+                <div class="mdl-cell mdl-cell-6-col" >
+                    <form style="background-color: #405952">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" ng-model="formData.text" id="todo_input">
+                            <label class="mdl-textfield__label" for="todo_input">My task.</label>
+                        </div>
+
+                        <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" ng-click="createTodo()"><i class="material-icons">add</i></button>
+                    </form>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <!-- TODO LIST -->
-    <div id="todo-list" class="row">
+
+
+
+
+<div class="container">
+
+    <!-- HEADER AND TODO COUNT
+    <div class="jumbotron text-center">
+        <h1>My To Do List</h1>
+        <p>Registered <items></items><span class="label label-info">{{ todos.length }}</span></p>
+    </div>
+
+    -->
+    <!-- TODO LIST
+    <div id="todos-list" class="row">
         <div class="col-sm-4 col-sm-offset-4">
 
-            <!-- LOOP OVER THE TODOS IN $scope.todos -->
+             LOOP OVER THE TODOS IN $scope.todos
             <div class="checkbox" ng-repeat="todo in todos">
                 <label>
                     <input type="checkbox" ng-click="deleteTodo(todo._id)"> {{ todo.text }}
                 </label>
             </div>
 
+
+
         </div>
     </div>
-
-    <!-- FORM TO CREATE TODOS -->
+    -->
+    <!-- FORM TO CREATE TODOS
     <div id="todo-form" class="row">
         <div class="col-sm-8 col-sm-offset-2 text-center">
             <form>
                 <div class="form-group">
-
-                    <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-                    <input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="formData.text">
+                    BIND THIS VALUE TO formData.text IN ANGULAR
+                    <input type="text" class="form-control input-lg text-center" placeholder="" ng-model="formData.text">
                 </div>
 
-                <!-- createToDo() WILL CREATE NEW TODOS -->
+                 createToDo() WILL CREATE NEW TODOS
                 <button type="submit" class="btn btn-primary btn-lg" ng-click="createTodo()">Add</button>
             </form>
         </div>
     </div>
+    -->
 
 </div>
-
 </body>
 </html>
