@@ -45,6 +45,84 @@ app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname + '/public'));
 
+/*
+var todoSchema = Schema({
+   text: String,
+
+});
+*/
+// Project Model
+var Todo = mongoose.model('Todo', {
+    text: String
+})
+
+
+
+// Routes
+
+// API
+
+// Get all
+app.get('/api/todos', function (req, res) {
+
+    // Get all todos in the database
+    Todo.find(function(err, all_todos){
+        if(err)
+            res.send(err);
+
+        res.json(all_todos); //Return all objects in a JSON format.
+    });
+});
+
+
+
+// Create a new entry and send back all after creation.
+app.post('/api/todos', function (req,res) {
+    Todo.create({
+        text:req.body.text,
+        done:false
+    }, function (err, todo) {
+        if (err)
+            res.send(err);
+
+
+        // Get and return all todos
+        Todo.find(function (err, all_todos) {
+            if(err)
+                req.send(err);
+
+            res.json(all_todos);
+        });
+    });
+});
+
+
+// Delete entry.
+app.delete('/api/todos/:todo_id', function (req, res) {
+    Todo.remove({
+        _id : req.params.todo_id
+    }, function (err, todo) {
+        if (err)
+            res.send(err);
+
+        // Get and return all entries again.
+        Todo.find(function(err, all_todos){
+            if (err)
+                res.send(err);
+
+            res.json(all_todos);
+        })
+    })
+});
+
+
+
+
+// Application
+app.get('*', function (req,res) {
+    res.sendfile('index.html')
+})
+
 var cool = require('cool-ascii-faces');
 app.get('/', function (request, response) {
     response.send(cool())
