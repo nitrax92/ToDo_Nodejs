@@ -20,6 +20,9 @@ body {}
     background-color: transparent;
 }
 
+#list-section{
+    background-color: #9C9B7A;
+}
 #header-text{
     text-align: center;
 
@@ -38,7 +41,7 @@ body {}
 }
 
 .mdl-layout__content{
-    margin-top: 150px;
+    padding-top: 150px;
 }
 
 
