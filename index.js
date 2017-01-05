@@ -63,6 +63,7 @@ var Todo = mongoose.model('Todo', {
 var ToDoLists = mongoose.model('Todo_lists', {
     list_name: String,
     is_complete: Boolean,
+    time : { type : Date, default: Date.now },
     tasks:[{task: String, isDone:Boolean}]
 });
 
@@ -139,10 +140,22 @@ app.post('/api/todo/lists', function (req, res) {
     })
 });
 
+
+// Change chosen list.
 app.get('/api/todo/lists/:list_id', function (req, res) {
     ToDoLists.find({_id: req.params.list_id}, function(err, current_list){
         console.log(current_list);
-       res.send(current_list);
+
+
+        data.current_list = current_list;
+
+        ToDoLists.find({is_complete: false},function(err, uncomplete_lists){
+            if (err)
+                req.send(err);
+
+            data.lists = uncomplete_lists;
+            res.json(data)
+        });
     });
 });
 
@@ -165,11 +178,34 @@ app.delete('/api/todo/lists/:list_id', function (req, res) {
     });
 });
 
-app.post('/api/todo/lists/tasks/:list_id', function (req, res) {
+// Create new task within a list.
+app.post('/api/todo/lists/tasks', function (req, res) {
    // Get the list form the ID.
-    ToDoLists.find({_id: req.params.list_id},function (err, current_list) {
-        current_list.tasks.push({task: req.body.task_description, is_done: false});
+
+    //req.body.current_list.tasks.push({task: req.body.task_description, is_done: false});
+    var newTask = {task: req.body.task_description, is_done: false};
+    ToDoLists.update({_id: req.body.list_id}, {$push:{tasks:newTask}}, function (err) {
+        if (err)
+            res.send(err);
+        else
+            console.log("success!")
+    });
+
+
+
+
+    ToDoLists.find({_id: req.body.list_id},function (err, current_list) {
+        console.log(current_list);
+        //current_list = current_list[0];
+        //var newTask = {task: req.body.task_description, is_done: false};
+        //current_list.tasks.push(newTask);
+        //console.log(current_list);
+
+        //ToDoLists.update(current_list);
+        //current_list.tasks.push({task: req.body.task_description, is_done: false});
+        //current_list.tasks.add({task: req.body.task_description, is_done: false});
     })
+
 });
 
 app.delete('/api/todo/lists/tasks/:list_id,task_name'), function (req, res) {

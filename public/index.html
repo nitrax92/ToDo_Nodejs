@@ -2,7 +2,7 @@
 <html ng-app="martinsTodo">
 <head>
     <meta charset="UTF-8">
-    <title>My To Do List Application.</title>
+    <title>My To Do Application.</title>
 
 
     <!-- Styling and Front-end framework -->
@@ -20,9 +20,7 @@
 
     <!-- JavaScript -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
-
-    <!-- <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script> load angular -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular.min.js"></script><!-- load angular -->
     <script src="core.js"></script>
 
 
@@ -42,10 +40,49 @@
                 <div class="mdl-cell mdl-cell--3-col"></div>
                 <div class="mdl-cell mdl-cell--6-col" id="header-text"><h1><b>My To Do List </b></h1></div>
                 <div class="mdl-cell mdl-cell--3-col"></div>
+                <div class="mdl-cell mdl-cell--12-col" style="text-align: center;">Current List: {{current_list.list_name}}</div>
+
+                <div class="mdl-cell mdl-cell--1-offset	 mdl-cell--2-col" id="list-section">
+                    <h4>My Lists</h4>
+                    <div ng-repeat="list in uncomplete_lists">
+                        <h2 ng-click="choosecurrent_list(list._id)">{{ list.list_name}}</h2>
+                    </div>
+
+                </div>
+                <div class="mdl-cell mdl-cell--3-col">
+                    <h4>Tasks</h4>
+                    <div ng-repeat="task in current_list.tasks">
+                    <h2>{{ task.task}}</h2>
+                        <div ng-if="task.task">
+                            Task excistss
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-if="current_list">
+                        <form style="background-color: white; color:black;">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <input class="mdl-textfield__input" type="text" ng-model="myFormData.task_description" id="list_task">
+                                <label class="mdl-textfield__label" for="list_task">New Task.</label>
+                            </div>
+                            <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" ng-click="createToDoListTask()"><i class="material-icons">add</i></button>
+                        </form>
+                </div>
 
 
                 <!-- The To Do List -->
-                <div class="mdl-cell mdl-cell--3-col"></div>
+                <div class="mdl-cell mdl-cell--3-col">
+                    <form style="background-color: #405952">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" ng-model="myFormData.list_name" id="todo_list">
+                            <label class="mdl-textfield__label" for="todo_list">New List.</label>
+                        </div>
+
+                        <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" ng-click="createToDoList()"><i class="material-icons">add</i></button>
+                    </form>
+
+
+                </div>
                 <div class="mdl-cell mdl-cell--6-col" id="todo-list">
 
 
@@ -64,17 +101,20 @@
                         </li>
                     </ul>
 
-
+                    <!--
                     <span class="mdl-chip mdl-chip--deletable" ng-repeat="todo in todos">
                         <span class="mdl-chip__text">{{todo.text}}</span>
                         <button type="button" class="mdl-chip__action" ng-click="deleteTodo(todo._id)"><i class="material-icons">cancel</i></button>
                     </span>
+                    -->
                 </div>
                 <div class="mdl-cell mdl-cell--3-col"></div>
 
 
                 <div class="mdl-cell mdl-cell--3-col"></div>
                 <div class="mdl-cell mdl-cell-6-col" >
+
+                    <!--
                     <form style="background-color: #405952">
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <input class="mdl-textfield__input" type="text" ng-model="formData.text" id="todo_input">
@@ -83,24 +123,19 @@
 
                         <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" ng-click="createTodo()"><i class="material-icons">add</i></button>
                     </form>
+
+                    -->
                 </div>
                 <div class="mdl-cell mdl-cell--3-col"></div>
 
                 <div class="mdl-cell mdl-cell-12-col" >
-
+                    <!--
                     <div ng-repeat="list in toDoLists">
                         <h2 ng-click="chooseToDoList(list._id)">{{ list.list_name}}</h2>
                     </div>
+                    -->
 
 
-                    <form style="background-color: #405952">
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input" type="text" ng-model="myFormData.list_name" id="todo_list">
-                            <label class="mdl-textfield__label" for="todo_input">New List.</label>
-                        </div>
-
-                        <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" ng-click="createToDoList()"><i class="material-icons">add</i></button>
-                    </form>
                 </div>
             </div>
         </main>

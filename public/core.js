@@ -2,14 +2,8 @@
  * Created by Mello on 1/4/2017.
  */
 
-var martinsToDo = angular.module('martinsTodo');
+var martinsToDo = angular.module('martinsTodo', []);
 
-
-
-
-
-
-/*
 function mainController($scope, $http){
     $scope.formData = {};
     $scope.myFormData = {};
@@ -17,9 +11,8 @@ function mainController($scope, $http){
     $http.get('/api/todos')
         .success(function(data){
             $scope.todos = data.todo;
-            $scope.toDoLists = data.lists;
-            console.log("Hello?");
-
+            $scope.uncomplete_lists = data.lists;
+            $scope.current_list = data.lists[0];
         })
         .error(function (data) {
             console.log('Error: ' + data);
@@ -39,7 +32,7 @@ function mainController($scope, $http){
     };
 
 
-
+    //New To Do Item.
     $scope.createTodo = function () {
         $http.post('/api/todos', $scope.formData)
             .success(function (data) {
@@ -54,12 +47,15 @@ function mainController($scope, $http){
             });
     };
 
+    // New empty to do list.
     $scope.createToDoList = function () {
+
+
       $http.post('/api/todo/lists', $scope.myFormData)
           .success(function(data){
               console.log("New List Successfully made.");
               $scope.myFormData = {};  //Clear the form
-              $scope.toDoLists = data; //Returned uncomplete lists
+              $scope.uncomplete_lists = data; //Returned uncomplete lists
               console.log(data)
 
           })
@@ -69,18 +65,28 @@ function mainController($scope, $http){
           });
     };
 
+    // New Task within an existing list.
+    $scope.createToDoListTask = function () {
+        // Populate list data to the scope.
+        $scope.myFormData.list_id = $scope.current_list._id;
+        $http.post('/api/todo/lists/tasks', $scope.myFormData)
+            .success(function (data) {
+                $scope.myFormData = {}; //Clear data
+                console.log("Successfully made task to list.")
+            })
+            .error(function (data) {
+                console.log("Some error when creating a new task." + data)
+            })
+    }
+
 
     $scope.chooseToDoList = function (id) {
         $http.get('/api/todo/lists/' + id)
             .success(function (data) {
                 console.log(data);
-                $scope.toDoList = data[0];
-                $scope.todos = {};
-                $scope.toDoLists = {};
-
-
-
-
+                $scope.current_list = data[0];
+                $scope.todos = data.todo;
+                $scope.uncomplete_lists = data.lists;
 
             })
             .error(function (data) {
@@ -100,4 +106,3 @@ function mainController($scope, $http){
             });
     };
 }
-*/
