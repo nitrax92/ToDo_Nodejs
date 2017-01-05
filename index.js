@@ -54,10 +54,19 @@ var todoSchema = Schema({
 
 });
 */
-// Project Model
+// Project Models
 var Todo = mongoose.model('Todo', {
     text: String
-})
+});
+
+
+var ToDoLists = mongoose.model('Todo_lists', {
+    list_name: String,
+    is_complete: Boolean,
+    tasks:[{task: String, isDone:Boolean}]
+});
+
+
 
 
 
@@ -67,13 +76,21 @@ var Todo = mongoose.model('Todo', {
 
 // Get all
 app.get('/api/todos', function (req, res) {
-
+    var data = {};
     // Get all todos in the database
     Todo.find(function(err, all_todos){
         if(err)
             res.send(err);
 
-        res.json(all_todos); //Return all objects in a JSON format.
+        data.todo = all_todos;
+        ToDoLists.find(function (err, all_lists) {
+            if (err)
+                res.send(err);
+
+            data.lists = all_lists;
+            res.json(data);
+        });
+        //res.json(all_todos); //Return all objects in a JSON format.
     });
 });
 
@@ -100,8 +117,71 @@ app.post('/api/todos', function (req,res) {
 });
 
 
+
+// Create a new List
+app.post('/api/todo/lists', function (req, res) {
+    ToDoLists.create({
+        list_name:req.body.list_name,
+        is_complete:false
+    }, function (err, todo_lists) {
+        if (err)
+            req.send(err);
+
+        //Get all uncomplete lists.
+        ToDoLists.find({is_complete: false},function(err, uncomplete_lists){
+            if (err)
+                req.send(err);
+
+            res.json(uncomplete_lists)
+        });
+        //Get all uncomplete lists.
+
+    })
+});
+
+app.get('/api/todo/lists/:list_id', function (req, res) {
+    ToDoLists.find({_id: req.params.list_id}, function(err, current_list){
+        console.log(current_list);
+       res.send(current_list);
+    });
+});
+
+app.delete('/api/todo/lists/:list_id', function (req, res) {
+    ToDoLists.remove({
+        _id : req.params.list_id
+    }, function (err, list) {
+        if (err)
+            res.send(err);
+
+
+        ToDoLists.find(function (err, all_lists) {
+            if (err)
+                res.send(err);
+
+            data.lists = all_lists;
+            res.json(data);
+        });
+
+    });
+});
+
+app.post('/api/todo/lists/tasks/:list_id', function (req, res) {
+   // Get the list form the ID.
+    ToDoLists.find({_id: req.params.list_id},function (err, current_list) {
+        current_list.tasks.push({task: req.body.task_description, is_done: false});
+    })
+});
+
+app.delete('/api/todo/lists/tasks/:list_id,task_name'), function (req, res) {
+    ToDoLists.find({_id: req.params.list_id}, function (err, current_list) {
+        current_list.tasks.find({task:req.params.task_name})
+    })
+};
+
+
 // Delete entry.
 app.delete('/api/todos/:todo_id', function (req, res) {
+    console.log(req.params.todo_id);
     Todo.remove({
         _id : req.params.todo_id
     }, function (err, todo) {
@@ -124,7 +204,7 @@ app.delete('/api/todos/:todo_id', function (req, res) {
 // Application
 app.get('*', function (req,res) {
     res.sendfile('index.html')
-})
+});
 
 var cool = require('cool-ascii-faces');
 app.get('/', function (request, response) {

@@ -2,15 +2,24 @@
  * Created by Mello on 1/4/2017.
  */
 
-var martinsToDo = angular.module('martinsTodo', []);
+var martinsToDo = angular.module('martinsTodo');
 
+
+
+
+
+
+/*
 function mainController($scope, $http){
     $scope.formData = {};
+    $scope.myFormData = {};
 
     $http.get('/api/todos')
         .success(function(data){
-            $scope.todos = data;
-            console.log(data);
+            $scope.todos = data.todo;
+            $scope.toDoLists = data.lists;
+            console.log("Hello?");
+
         })
         .error(function (data) {
             console.log('Error: ' + data);
@@ -29,6 +38,56 @@ function mainController($scope, $http){
             });
     };
 
+
+
+    $scope.createTodo = function () {
+        $http.post('/api/todos', $scope.formData)
+            .success(function (data) {
+
+                $scope.formData = {}; //Clear the form.
+                $scope.todos = data;
+                console.log(data);
+            })
+            .error(function(data){
+
+                console.log('Error: ' + data);
+            });
+    };
+
+    $scope.createToDoList = function () {
+      $http.post('/api/todo/lists', $scope.myFormData)
+          .success(function(data){
+              console.log("New List Successfully made.");
+              $scope.myFormData = {};  //Clear the form
+              $scope.toDoLists = data; //Returned uncomplete lists
+              console.log(data)
+
+          })
+          .error(function (data) {
+              console.log("New List Failed.");
+              console.log('Error, could not create a new list. ' + data)
+          });
+    };
+
+
+    $scope.chooseToDoList = function (id) {
+        $http.get('/api/todo/lists/' + id)
+            .success(function (data) {
+                console.log(data);
+                $scope.toDoList = data[0];
+                $scope.todos = {};
+                $scope.toDoLists = {};
+
+
+
+
+
+            })
+            .error(function (data) {
+                console.log("Some error when finding list." + data);
+            });
+    };
+
     // delete a todo after checking it
     $scope.deleteTodo = function(id) {
         $http.delete('/api/todos/' + id)
@@ -41,120 +100,4 @@ function mainController($scope, $http){
             });
     };
 }
-
-
-    angular.module('myApp', ['ngMaterial', 'mdDataTable']);
-    angular.module('myApp').controller('myController', function($scope, $mdToast){
-        $scope.nutritionList = [
-            {
-                id: 601,
-                name: 'Frozen joghurt',
-                calories: 159,
-                fat: 6.0,
-                carbs: 24,
-                protein: 4.0,
-                sodium: 87,
-                calcium: '14%',
-                iron: '1%'
-            },
-            {
-                id: 602,
-                name: 'Ice cream sandwitch',
-                calories: 237,
-                fat: 9.0,
-                carbs: 37,
-                protein: 4.3,
-                sodium: 129,
-                calcium: '84%',
-                iron: '1%'
-            },
-            {
-                id: 603,
-                name: 'Eclair',
-                calories: 262,
-                fat: 16.0,
-                carbs: 24,
-                protein: 6.0,
-                sodium: 337,
-                calcium: '6%',
-                iron: '7%'
-            },
-            {
-                id: 604,
-                name: 'Cupkake',
-                calories: 305,
-                fat: 3.7,
-                carbs: 67,
-                protein: 4.3,
-                sodium: 413,
-                calcium: '3%',
-                iron: '8%'
-            },
-            {
-                id: 605,
-                name: 'Gingerbread',
-                calories: 356,
-                fat: 16.0,
-                carbs: 49,
-                protein: 2.9,
-                sodium: 327,
-                calcium: '7%',
-                iron: '16%'
-            },
-            {
-                id: 606,
-                name: 'Jelly bean',
-                calories: 375,
-                fat: 0.0,
-                carbs: 94,
-                protein: 0.0,
-                sodium: 50,
-                calcium: '0%',
-                iron: '0%'
-            },
-            {
-                id: 607,
-                name: 'Lollipop',
-                calories: 392,
-                fat: 0.2,
-                carbs: 98,
-                protein: 0,
-                sodium: 38,
-                calcium: '0%',
-                iron: '2%'
-            },
-            {
-                id: 608,
-                name: 'Honeycomb',
-                calories: 408,
-                fat: 3.2,
-                carbs: 87,
-                protein: 6.5,
-                sodium: 562,
-                calcium: '0%',
-                iron: '45%'
-            },
-            {
-                id: 609,
-                name: 'Donut',
-                calories: 452,
-                fat: 25.0,
-                carbs: 51,
-                protein: 4.9,
-                sodium: 326,
-                calcium: '2%',
-                iron: '22%'
-            },
-            {
-                id: 610,
-                name: 'KitKat',
-                calories: 518,
-                fat: 26.0,
-                carbs: 65,
-                protein: 7,
-                sodium: 54,
-                calcium: '12%',
-                iron: '6%'
-            }
-        ];
-    });
+*/
