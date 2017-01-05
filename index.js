@@ -143,6 +143,8 @@ app.post('/api/todo/lists', function (req, res) {
 
 // Change chosen list.
 app.get('/api/todo/lists/:list_id', function (req, res) {
+    var data = {};
+    console.log("Changing list.");
     ToDoLists.find({_id: req.params.list_id}, function(err, current_list){
         console.log(current_list);
 
@@ -154,12 +156,14 @@ app.get('/api/todo/lists/:list_id', function (req, res) {
                 req.send(err);
 
             data.lists = uncomplete_lists;
-            res.json(data)
+            res.send(data)
         });
     });
 });
 
-app.delete('/api/todo/lists/:list_id', function (req, res) {
+app.delete('/api/todo/lists/remove/:list_id', function (req, res) {
+    var data = {};
+    console.log("Deleting id: " + req.param.list_id);
     ToDoLists.remove({
         _id : req.params.list_id
     }, function (err, list) {
@@ -182,6 +186,7 @@ app.delete('/api/todo/lists/:list_id', function (req, res) {
 app.post('/api/todo/lists/tasks', function (req, res) {
    // Get the list form the ID.
 
+
     //req.body.current_list.tasks.push({task: req.body.task_description, is_done: false});
     var newTask = {task: req.body.task_description, is_done: false};
     ToDoLists.update({_id: req.body.list_id}, {$push:{tasks:newTask}}, function (err) {
@@ -196,6 +201,7 @@ app.post('/api/todo/lists/tasks', function (req, res) {
 
     ToDoLists.find({_id: req.body.list_id},function (err, current_list) {
         console.log(current_list);
+        res.send(current_list);
         //current_list = current_list[0];
         //var newTask = {task: req.body.task_description, is_done: false};
         //current_list.tasks.push(newTask);

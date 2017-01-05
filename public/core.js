@@ -52,11 +52,12 @@ function mainController($scope, $http){
 
 
       $http.post('/api/todo/lists', $scope.myFormData)
-          .success(function(data){
-              console.log("New List Successfully made.");
+          .success(function(lists){
+              console.log("New List Successfully made." + lists);
               $scope.myFormData = {};  //Clear the form
-              $scope.uncomplete_lists = data; //Returned uncomplete lists
-              console.log(data)
+              $scope.uncomplete_lists = lists; //Returned uncomplete lists
+              $scope.current_list = lists[0];
+              console.log(lists)
 
           })
           .error(function (data) {
@@ -67,24 +68,41 @@ function mainController($scope, $http){
 
     // New Task within an existing list.
     $scope.createToDoListTask = function () {
+        var data = {};
         // Populate list data to the scope.
         $scope.myFormData.list_id = $scope.current_list._id;
         $http.post('/api/todo/lists/tasks', $scope.myFormData)
             .success(function (data) {
                 $scope.myFormData = {}; //Clear data
+                $scope.current_list = data[0];
                 console.log("Successfully made task to list.")
             })
             .error(function (data) {
                 console.log("Some error when creating a new task." + data)
             })
-    }
+    };
+
+
+    $scope.deleteToDoList = function(id){
+        console.log(id);
+      $http.delete('/api/todo/lists/remove/' + id)
+          .success(function (data){
+           //Handle incomming data
+            $scope.current_list = data.lists[0];
+            $scope.uncomplete_lists = data.lists;
+            // All remaining lists, a current chosen list.
+        })
+        .error(function(data){
+             console.log(data);
+            });
+    };
 
 
     $scope.chooseToDoList = function (id) {
         $http.get('/api/todo/lists/' + id)
             .success(function (data) {
-                console.log(data);
-                $scope.current_list = data[0];
+                console.log(data.current_list[0]);
+                $scope.current_list = data.current_list[0];
                 $scope.todos = data.todo;
                 $scope.uncomplete_lists = data.lists;
 
