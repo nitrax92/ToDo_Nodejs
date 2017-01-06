@@ -2,7 +2,7 @@
  * Created by Mello on 1/4/2017.
  */
 
-var martinsToDo = angular.module('martinsTodo', []);
+var martinsToDo = angular.module('martinsTodo', ['ngAnimate']);
 
 function mainController($scope, $http){
     $scope.formData = {};
@@ -110,6 +110,30 @@ function mainController($scope, $http){
             .error(function (data) {
                 console.log("Some error when finding list." + data);
             });
+    };
+    
+    $scope.deleteToDoTask = function (list_id, task_id) {
+        console.log(list_id);
+        console.log(task_id);
+        $http.delete('/api/todo/lists/tasks/' + list_id + '/' + task_id)
+            .success(function (data) {
+                console.log("Successfully deleted item within a list.")
+                $scope.current_list = data;
+            })
+            .error(function (data) {
+                console.log("Could not delete item within list.")
+            })
+
+    };
+
+    $scope.completeToDoTask = function(list_id, task_id){
+      $http.get('/api/todo/lists/tasks/status/' + list_id + '/' + task_id)
+          .sucess(function(data){
+              console.log("Successfully edited a task.")
+          })
+          .error(function (data) {
+              console.log("Could not complete task")
+          })
     };
 
     // delete a todo after checking it

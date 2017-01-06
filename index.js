@@ -60,12 +60,17 @@ var Todo = mongoose.model('Todo', {
 });
 
 
-var ToDoLists = mongoose.model('Todo_lists', {
+var ToDoLists = mongoose.model('Todo_lists',
+
+    //Schema
+    {
     list_name: String,
     is_complete: Boolean,
     time : { type : Date, default: Date.now },
     tasks:[{task: String, isDone:Boolean}]
-});
+    }
+
+    );
 
 
 
@@ -156,11 +161,14 @@ app.get('/api/todo/lists/:list_id', function (req, res) {
                 req.send(err);
 
             data.lists = uncomplete_lists;
+
             res.send(data)
         });
     });
 });
 
+
+// Delete list
 app.delete('/api/todo/lists/remove/:list_id', function (req, res) {
     var data = {};
     console.log("Deleting id: " + req.param.list_id);
@@ -188,7 +196,7 @@ app.post('/api/todo/lists/tasks', function (req, res) {
 
 
     //req.body.current_list.tasks.push({task: req.body.task_description, is_done: false});
-    var newTask = {task: req.body.task_description, is_done: false};
+    var newTask = {task: req.body.task_description, isDone: false};
     ToDoLists.update({_id: req.body.list_id}, {$push:{tasks:newTask}}, function (err) {
         if (err)
             res.send(err);
@@ -200,25 +208,65 @@ app.post('/api/todo/lists/tasks', function (req, res) {
 
 
     ToDoLists.find({_id: req.body.list_id},function (err, current_list) {
-        console.log(current_list);
         res.send(current_list);
-        //current_list = current_list[0];
-        //var newTask = {task: req.body.task_description, is_done: false};
-        //current_list.tasks.push(newTask);
-        //console.log(current_list);
-
-        //ToDoLists.update(current_list);
-        //current_list.tasks.push({task: req.body.task_description, is_done: false});
-        //current_list.tasks.add({task: req.body.task_description, is_done: false});
     })
 
 });
 
-app.delete('/api/todo/lists/tasks/:list_id,task_name'), function (req, res) {
-    ToDoLists.find({_id: req.params.list_id}, function (err, current_list) {
-        current_list.tasks.find({task:req.params.task_name})
-    })
-};
+
+// Delete a task within a list.
+app.delete('/api/todo/lists/tasks/:list_id/:task_id', function (req, res) {
+    // Find the list
+    // Find the object within the list
+    // Delete the object,
+    // return Updated list.
+
+
+
+    ToDoLists.update(
+        {_id:req.params.list_id},
+        {$pull: {tasks: {_id: [req.params.task_id]}}},
+        {},
+        function (error, data) {
+            if(error)
+                console.log("Update error.")
+
+            //Todo get updated list and send it back.
+            ToDoLists.find({_id: req.params.list_id}, function (error, current_list) {
+                current_list = current_list[0];
+
+                res.json(current_list);
+            })
+        }
+    );
+    }
+);
+
+app.get('/api/todo/lists/tasks/status/:list_id/:task_id', function (req, res) {
+
+
+    ToDoLists.update(
+        {'tasks._id': req.params.task_id},
+        {$set: {
+            'tasks.$.isDone': true
+        }}, function (err, affected_task) {
+
+            ToDoLists.find({_id: req.params.list_id}, function (error, current_list) {
+                current_list = current_list[0];
+
+                res.json(current_list);
+            })
+        }
+    )
+
+});
+
+
+//
+
+
+
+
 
 
 // Delete entry.

@@ -21,9 +21,10 @@
     <!-- JavaScript -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular.min.js"></script><!-- load angular -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular-animate.js"></script>
     <script src="core.js"></script>
 
-
+    <link rel="stylesheet" href="ng-animate.css">
     <!-- md data table-->
     <link rel="stylesheet" type="text/css" href="/static/md-data-table/md-data-table-style.css">
     <script src="/static/md-data-table/md-data-table.js"></script>
@@ -38,10 +39,14 @@
             <div class="mdl-grid center-items">
                 <!-- Header -->
                 <div class="mdl-cell mdl-cell--3-col"></div>
-                <div class="mdl-cell mdl-cell--6-col" id="header-text"><h1><b>My To Do List </b></h1></div>
+                <div class="mdl-cell mdl-cell--6-col" id="header-text"><h3><b>My To Do List </b></h3></div>
                 <div class="mdl-cell mdl-cell--3-col"></div>
-                <div class="mdl-cell mdl-cell--12-col" style="text-align: center;">Current List: {{current_list.list_name}}</div>
 
+
+                <!-- Current List and  -->
+                <div class="mdl-cell mdl-cell--3-col"></div>
+                <div class="mdl-cell mdl-cell--6-col" style="text-align: center; border: 2px solid purple;"><h3>Liste: {{current_list.list_name}}</h3> <button>Change List</button></div>
+                <div class="mdl-cell mdl-cell--3-col"></div>
 
                 <!-- All Uncomplete Lists -->
                 <div class="mdl-cell mdl-cell--1-offset	 mdl-cell--2-col" id="list-section">
@@ -53,10 +58,16 @@
                 </div>
                 <div class="mdl-cell mdl-cell--3-col">
                     <h4>Tasks</h4>
-                    <div ng-repeat="task in current_list.tasks">
-                    <h2>{{ task.task}}</h2>
-                        <div ng-if="task.task">
-                            Task excistss
+                    <div ng-repeat="task in current_list.tasks" class="spin-toggle">
+                        <div >
+                        <h2>{{ task.task}} Status: {{task.isDone}}</h2>
+                        <button ng-click="deleteToDoTask(current_list._id, task._id)">
+                            Delete Item.
+                        </button>
+
+                        <button ng-click="completeToDoTask(current_list._id, task._id)">
+                            Set complete.
+                        </button>
                         </div>
                     </div>
                 </div>
