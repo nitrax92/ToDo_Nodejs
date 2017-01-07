@@ -8,11 +8,39 @@ function mainController($scope, $http){
     $scope.formData = {};
     $scope.myFormData = {};
 
+    // All lists
+    $scope.lists = {};
+    $scope.current_list_index = 0;
+    $scope.current_list_details = {percentage: 0, completed_tasks: 0, uncomplete_tasks: 0};
+
+    //Update list details.
+    function currentListDetails(current_list){
+        var complete = 0;
+        var uncomplete = 0;
+        var percentage = 0;
+        for (var i = 0; i<current_list.tasks.length; i++){
+            if(current_list.tasks[i].is_done){
+                complete++;
+            }
+            else{
+                uncomplete++;
+            }
+        }
+        if(current_list.tasks.length)
+            percentage = Math.round((complete / current_list.tasks.length)*100);
+
+
+        $scope.current_list_details = {percentage: percentage, completed_tasks:complete, uncomplete_tasks: uncomplete}
+    }
+
+
     $http.get('/api/todos')
         .success(function(data){
             $scope.todos = data.todo;
             $scope.uncomplete_lists = data.lists;
             $scope.current_list = data.lists[0];
+            $scope.lists = data.lists;
+            currentListDetails($scope.current_list)
         })
         .error(function (data) {
             console.log('Error: ' + data);
@@ -30,6 +58,92 @@ function mainController($scope, $http){
                 console.log('Error: ' + data);
             });
     };
+
+
+    // ***************** Working with the local data ****************************
+    $scope.addList = function () {
+        console.log("Adding List!!");
+        var listObject = {list_name: $scope.myFormData.list_name, is_complete:false, tasks: {}, is_local:true};
+        console.log($scope.myFormData);
+        $scope.lists.push(listObject);
+        $scope.uncomplete_lists = $scope.lists;
+
+        console.log($scope.lists)
+    };
+
+    $scope.changeList = function () {
+        console.log("Changing List!")
+    };
+
+    $scope.saveChanges = function () {
+        console.log("Saving Changes!!");
+
+
+        $http.post('/api/list/savechanges' , $scope.lists)
+            .success(function (data) {
+                console.log("SaveChanges success.")
+        })
+            .error(function(data){
+                console.log(data)
+        });
+    };
+
+    $scope.addTask = function () {
+        var task_object = {task: "My Local Task", is_done:false};
+        $scope.current_list.tasks.push(task_object);
+
+        // Edit existing list object to match updated current_list
+        //$scope.lists.find({list_name: current_list.list_name});
+        var index;
+        $scope.lists.some(function(entry, i){
+           if(entry == $scope.current_list){
+               console.log(entry.list_name);
+               index = i;
+               return true;
+           }
+        });
+        $scope.lists[index] = $scope.current_list;
+        currentListDetails($scope.current_list);
+        console.log($scope.current_list)
+
+    };
+
+    $scope.deleteTask = function (task) {
+        var index;
+
+        $scope.current_list.tasks.some(function(entry, i){
+            if(entry == task){
+                index = i;
+                return true;
+            }
+        });
+
+
+        console.log(index);
+        if (index >= 0)
+            $scope.current_list.tasks.splice(index, 1);
+            currentListDetails($scope.current_list)
+    };
+    
+    $scope.taskStatus = function (task) {
+        var index;
+
+        $scope.current_list.tasks.some(function(entry, i){
+            if(entry == task){
+                index = i;
+                return true;
+            }
+        });
+
+        if(index >= 0){
+            $scope.current_list.tasks[index].is_done ^=true;
+            console.log("Change?" + $scope.current_list.tasks[index].is_done);
+            currentListDetails($scope.current_list)
+        }
+
+
+    };
+
 
 
     //New To Do Item.
@@ -104,7 +218,7 @@ function mainController($scope, $http){
                 console.log(data.current_list[0]);
                 $scope.current_list = data.current_list[0];
                 $scope.todos = data.todo;
-                $scope.uncomplete_lists = data.lists;
+                //$scope.uncomplete_lists = data.lists;
 
             })
             .error(function (data) {
@@ -148,3 +262,4 @@ function mainController($scope, $http){
             });
     };
 }
+

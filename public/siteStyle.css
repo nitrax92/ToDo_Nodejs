@@ -55,6 +55,10 @@ h1{
 }
 
 
+#task_list{
+    text-align: center;
+}
+
 
 .mdl-list .mdl-list__item{
     /*border-bottom: 1px black solid; */

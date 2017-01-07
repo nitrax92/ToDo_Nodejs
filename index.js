@@ -44,6 +44,7 @@ app.set('port', (process.env.PORT || 5000));
 
 // public content, everything frontend
 app.use(express.static(__dirname + '/public'));
+app.use('/views', express.static(__dirname + '/public/views'));
 
 // Load md-data-table to static available content
 app.use('/static/md-data-table',express.static(__dirname + '/node_modules/md-data-table/dist'));
@@ -66,11 +67,9 @@ var ToDoLists = mongoose.model('Todo_lists',
     {
     list_name: String,
     is_complete: Boolean,
-    time : { type : Date, default: Date.now },
-    tasks:[{task: String, isDone:Boolean}]
+    tasks:[{task: String, is_done:Boolean}]
     }
-
-    );
+);
 
 
 
@@ -112,12 +111,12 @@ app.post('/api/todos', function (req,res) {
             res.send(err);
 
 
-        // Get and return all todos
-        Todo.find(function (err, all_todos) {
-            if(err)
-                req.send(err);
+    // Get and return all todos
+    Todo.find(function (err, all_todos) {
+        if(err)
+            req.send(err);
 
-            res.json(all_todos);
+        res.json(all_todos);
         });
     });
 });
@@ -287,6 +286,84 @@ app.delete('/api/todos/:todo_id', function (req, res) {
         })
     })
 });
+
+
+
+
+
+
+
+
+
+
+// ************************** Angular Data Handling ****************************
+app.post('/api/list/savechanges', function (req, res) {
+    console.log("Saving changes..");
+
+    // req.body = list of objects.
+
+    // Itterate through the list, update existing, add new.
+    for(var i = 0; i<req.body.length; i++){
+        console.log(i + ' - ' + req.body[i].list_name);
+
+        current_list_object = req.body[i];
+
+        if(req.body[i].is_local){
+            console.log("Local list found, create a new object in database.");
+            createNewList(current_list_object)
+
+        }
+
+        // Delete all completed lists?
+        else if(current_list_object.is_complete || current_list_object.to_delete){
+            console.log("Delete complete or list that is set for deletion..")
+        }
+        else{
+            console.log("EXISTING LIST");
+            updateList(current_list_object)
+        }
+    }
+
+});
+
+// Update a single task in a list.
+function updateTasks(list_id, task_object){
+    console.log("Updating tasks.")
+}
+
+// Delete a single task from a list
+function deleteTask(list_id, task_id){
+
+}
+
+//Create new List entry.
+function createNewList(list_object){
+    ToDoLists.create(
+        {
+            list_name: list_object.list_name,
+            is_complete: list_object.is_complete,
+            tasks: list_object.tasks
+        }, function (err, new_list_object) {
+            if (err){
+                console.log(err)
+            }
+        }
+    )
+}
+
+// Update existing list object.
+function updateList(list_object){
+    ToDoLists.update(
+        {_id:list_object._id},
+        {$set: {
+            tasks: list_object.tasks
+        }}, function (err, affected_list_object){
+            if (err)
+                console.log(err)
+        }
+    )
+
+}
 
 
 

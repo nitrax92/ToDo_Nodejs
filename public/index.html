@@ -34,32 +34,82 @@
 
 </head>
 <body ng-controller="mainController">
-    <div class="mdl-layout mdl-js-layout">
-        <main class="mdl-layout__content">
-            <div class="mdl-grid center-items">
-                <!-- Header -->
-                <div class="mdl-cell mdl-cell--3-col"></div>
-                <div class="mdl-cell mdl-cell--6-col" id="header-text"><h3><b>My To Do List </b></h3></div>
-                <div class="mdl-cell mdl-cell--3-col"></div>
+<div class="mdl-layout mdl-js-layout">
+    <main class="mdl-layout__content">
+        <div class="mdl-grid center-items">
+            <!-- Header -->
+            <div class="mdl-cell mdl-cell--3-col"></div>
+            <div class="mdl-cell mdl-cell--6-col" id="header-text"><h3><b>Order of the day</b></h3> </div>
 
 
-                <!-- Current List and  -->
-                <div class="mdl-cell mdl-cell--3-col"></div>
-                <div class="mdl-cell mdl-cell--6-col" style="text-align: center; border: 2px solid purple;"><h3>Liste: {{current_list.list_name}}</h3> <button>Change List</button></div>
-                <div class="mdl-cell mdl-cell--3-col"></div>
 
-                <!-- All Uncomplete Lists -->
-                <div class="mdl-cell mdl-cell--1-offset	 mdl-cell--2-col" id="list-section">
-                    <h4>My Lists</h4>
-                    <div ng-repeat="list in uncomplete_lists">
-                        <h2 ng-click="chooseToDoList(list._id)">{{ list.list_name}}</h2>
-                        <button ng-click="deleteToDoList(list._id)">Delete this list</button>
+
+            <div class="mdl-cell mdl-cell--3-col"></div>
+
+
+
+            <!-- Current List -->
+            <div class="mdl-cell mdl-cell--6-col" style="background-color: #eeeeee">
+                <div class="mdl-grid">
+                    <div class="mdl-cell mdl-cell--1-offset	 mdl-cell--4-col">
+                        <h4>{{current_list.list_name}}</h4>
+                    </div>
+                    <div class="mdl-cell mdl-cell--5-col">
+                        <h4> Progress: {{current_list_details.percentage}}% Uncomplete: {{current_list_details.uncomplete_tasks}}</h4>
+                    </div>
+                    <div class="mdl-cell mdl-cell--2-col">
+                        <button class="mdl-button">Change List</button>
+                    </div>
+
+
+                    <div class="mdl-cell mdl-cell--12-col">
+                        <hr>
+                        <h4>Tasks</h4>
+                        <div id="task_list">
+                            <div ng-repeat="task in current_list.tasks">
+                                <!-- Task is set as done -->
+                                <div ng-if="task.is_done">
+                                    <button class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">mood</i></button> {{task.task}} <button class="mdl-button mdl-js-button" ng-click="deleteTask(task)">Remove</button>
+                                </div>
+
+                                <!-- Task is not set as done -->
+                                <div ng-if="!task.is_done">
+                                    <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="taskStatus(task)"><i class="material-icons">done</i></button>{{task.task}} <button class="mdl-button mdl-js-button" ng-click="deleteTask(task)">Remove</button>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="mdl-button mdl-js-button mdl-button--colored" ng-click="saveChanges()">Save Changes</i></button>
+                            <button class="mdl-button mdl-js-button mdl-button--colored" ng-click="addTask()">Add Local Task</button>
+                        </div>
                     </div>
                 </div>
-                <div class="mdl-cell mdl-cell--3-col">
-                    <h4>Tasks</h4>
-                    <div ng-repeat="task in current_list.tasks" class="spin-toggle">
-                        <div >
+            </div>
+
+            <!-- Current List and
+            <div class="mdl-cell mdl-cell--3-col"></div>
+            <div class="mdl-cell mdl-cell--6-col" style="text-align: center; border: 2px solid purple;">
+               Liste: {{current_list.list_name}}
+                <button type="button" class="mdl-button show-modal">Show Modal</button>
+
+            </div>
+            <div class="mdl-cell mdl-cell--3-col"></div>
+
+            -->
+
+            <!-- All Uncomplete Lists
+            <div class="mdl-cell mdl-cell--1-offset	 mdl-cell--2-col" id="list-section">
+                <h4>My Lists</h4>
+                <div ng-repeat="list in uncomplete_lists">
+                    <h2 ng-click="">{{ list.list_name}}</h2>
+                    <button ng-click="deleteToDoList(list._id)">
+                        Delete this list
+                    </button>
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--3-col">
+                <h4>Tasks</h4>
+                <div ng-repeat="task in current_list.tasks" class="spin-toggle">
+                    <div >
                         <h2>{{ task.task}} Status: {{task.isDone}}</h2>
                         <button ng-click="deleteToDoTask(current_list._id, task._id)">
                             Delete Item.
@@ -68,38 +118,17 @@
                         <button ng-click="completeToDoTask(current_list._id, task._id)">
                             Set complete.
                         </button>
-                        </div>
                     </div>
                 </div>
-
-                <div ng-if="current_list">
-                        <form style="background-color: white; color:black;">
-                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <input class="mdl-textfield__input" type="text" ng-model="myFormData.task_description" id="list_task">
-                                <label class="mdl-textfield__label" for="list_task">New Task.</label>
-                            </div>
-                            <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" ng-click="createToDoListTask()"><i class="material-icons">add</i></button>
-                        </form>
-                </div>
+            </div>
+            -->
 
 
-                <!-- The To Do List -->
-                <div class="mdl-cell mdl-cell--3-col">
-                    <form style="background-color: #405952">
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input" type="text" ng-model="myFormData.list_name" id="todo_list">
-                            <label class="mdl-textfield__label" for="todo_list">New List.</label>
-                        </div>
-
-                        <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" ng-click="createToDoList()"><i class="material-icons">add</i></button>
-                    </form>
-
-
-                </div>
 
             <!-- End Grid -->
-            </div>
-        </main>
-    </div>
+        </div>
+    </main>
+</div>
+
 </body>
 </html>

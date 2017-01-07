@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html ng-app="martinsTodo">
+<head>
+    <meta charset="UTF-8">
+    <title>My To Do Application.</title>
+
+
+    <!-- Styling and Front-end framework -->
+    <!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">load bootstrap -->
+
+    <link rel="stylesheet" href="siteStyle.css">
+
+    <!-- FONT -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+
+    <!-- Material Design Lite -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.brown-deep_orange.min.css" />
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <!-- JavaScript -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular.min.js"></script><!-- load angular -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular-animate.js"></script>
+    <script src="core.js"></script>
+
+    <link rel="stylesheet" href="ng-animate.css">
+    <!-- md data table-->
+    <link rel="stylesheet" type="text/css" href="/static/md-data-table/md-data-table-style.css">
+    <script src="/static/md-data-table/md-data-table.js"></script>
+
+
+
+
+</head>
+<body ng-controller="mainController">
+    <div class="mdl-layout mdl-js-layout">
+        <main class="mdl-layout__content">
+            <div class="mdl-grid center-items">
+                <!-- Header -->
+                <div class="mdl-cell mdl-cell--3-col"></div>
+                <div class="mdl-cell mdl-cell--6-col" id="header-text"><h3><b>My To Do List </b></h3></div>
+                <div class="mdl-cell mdl-cell--3-col"></div>
+
+
+                <!-- Current List and  -->
+                <div class="mdl-cell mdl-cell--3-col"></div>
+                <div class="mdl-cell mdl-cell--6-col" style="text-align: center; border: 2px solid purple;"><h3>Liste: {{current_list.list_name}}</h3> <button>Change List</button></div>
+                <div class="mdl-cell mdl-cell--3-col"></div>
+
+                <!-- All Uncomplete Lists -->
+                <div class="mdl-cell mdl-cell--1-offset	 mdl-cell--2-col" id="list-section">
+                    <h4>My Lists</h4>
+                    <div ng-repeat="list in uncomplete_lists">
+                        <h2 ng-click="chooseToDoList(list._id)">{{ list.list_name}}</h2>
+                        <button ng-click="deleteToDoList(list._id)">Delete this list</button>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--3-col">
+                    <h4>Tasks</h4>
+                    <div ng-repeat="task in current_list.tasks" class="spin-toggle">
+                        <div >
+                        <h2>{{ task.task}} Status: {{task.isDone}}</h2>
+                        <button ng-click="deleteToDoTask(current_list._id, task._id)">
+                            Delete Item.
+                        </button>
+
+                        <button ng-click="completeToDoTask(current_list._id, task._id)">
+                            Set complete.
+                        </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-if="current_list">
+                        <form style="background-color: white; color:black;">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <input class="mdl-textfield__input" type="text" ng-model="myFormData.task_description" id="list_task">
+                                <label class="mdl-textfield__label" for="list_task">New Task.</label>
+                            </div>
+                            <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" ng-click="createToDoListTask()"><i class="material-icons">add</i></button>
+                        </form>
+                </div>
+
+
+                <!-- The To Do List -->
+                <div class="mdl-cell mdl-cell--3-col">
+                    <form style="background-color: #405952">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" ng-model="myFormData.list_name" id="todo_list">
+                            <label class="mdl-textfield__label" for="todo_list">New List.</label>
+                        </div>
+
+                        <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" ng-click="createToDoList()"><i class="material-icons">add</i></button>
+                    </form>
+                </div>
+
+
+                <!-- The To Do List -->
+                <div class="mdl-cell mdl-cell--3-col">
+                    <form style="background-color: #405952">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" ng-model="myFormData.list_name" id="local_list">
+                            <label class="mdl-textfield__label" for="local_list">New Local List.</label>
+                        </div>
+
+                        <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" ng-click="addList()"><i class="material-icons">add</i></button>
+                    </form>
+                </div>
+                <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" ng-click="saveChanges()">Save Changes</i></button>
+                <button class="mdl-button mdl-js-button mdl-button--colored" ng-click="addTask()">Add Local Task</button>
+
+
+
+                <!-- End Grid -->
+            </div>
+        </main>
+    </div>
+</body>
+</html>
