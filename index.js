@@ -19,6 +19,7 @@ var uristring =
     process.env.MONGODB_URI ||
     'mongodb://db_user:123qwe@ds151228.mlab.com:51228/heroku_gxxcx978';
 
+mongoose.Promise = global.Promise;
 mongoose.connect(uristring, function (err, res) {
     if (err) {
         console.log ('ERROR connecting to: ' + uristring + '. ' + err);
@@ -68,6 +69,7 @@ var ToDoLists = mongoose.model('Todo_lists',
     {
     list_name: String,
     is_complete: Boolean,
+    timestamp_updated: Number,
     tasks:[{task: String, is_done:Boolean}]
     }
 );
@@ -83,20 +85,14 @@ var ToDoLists = mongoose.model('Todo_lists',
 // Get all
 app.get('/api/todos', function (req, res) {
     var data = {};
-    // Get all todos in the database
-    Todo.find(function(err, all_todos){
-        if(err)
+
+    //
+    ToDoLists.find(function (err, all_lists) {
+        if (err)
             res.send(err);
-
-        data.todo = all_todos;
-        ToDoLists.find(function (err, all_lists) {
-            if (err)
-                res.send(err);
-
-            data.lists = all_lists;
-            res.json(data);
-        });
-        //res.json(all_todos); //Return all objects in a JSON format.
+        console.log("Sorted?");
+        data.lists = all_lists;
+        res.json(data);
     });
 });
 
@@ -150,6 +146,7 @@ function createNewList(list_object){
         {
             list_name: list_object.list_name,
             is_complete: list_object.is_complete,
+            timestamp_updated: list_object.timestamp_updated,
             tasks: list_object.tasks
         }, function (err, new_list_object) {
             if (err){
@@ -165,7 +162,8 @@ function updateList(list_object){
         {_id:list_object._id},
         {$set: {
             tasks: list_object.tasks,
-            is_complete: list_object.is_complete
+            is_complete: list_object.is_complete,
+            timestamp_updated: list_object.timestamp_updated,
         }}, function (err, updated_list_object){
             if (err)
                 console.log(err)

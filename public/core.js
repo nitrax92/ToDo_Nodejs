@@ -33,7 +33,9 @@ function mainController($scope, $http){
         console.log(index);
         if (index >= 0)
             $scope.lists[index].is_complete = status;
-    };
+            //Mark list as updated by date.
+
+    }
 
 
     //Update list details.
@@ -65,6 +67,24 @@ function mainController($scope, $http){
     }
 
 
+    // Get the object with the latest updated date.
+    function lastUpdatedListIndex(list){
+        var currentIndex = 0;
+        var currentLatestDate = 0;
+
+        for(var i = 0; i<list.length; i++){
+            console.log(list[i].timestamp_updated);
+            if(list[i].timestamp_updated > currentLatestDate){
+                console.log(i);
+                currentIndex = i;
+                currentLatestDate = list[i].timestamp_updated
+            }
+        }
+
+        return currentIndex;
+    }
+
+
 
     // Move object from one index to another.
     // Code from http://www.w3resource.com/javascript-exercises/javascript-array-exercise-38.php
@@ -90,8 +110,19 @@ function mainController($scope, $http){
         .success(function(data){
             $scope.todos = data.todo;
             $scope.uncomplete_lists = data.lists;
-            $scope.current_list = data.lists[0];
             $scope.lists = data.lists;
+            $scope.current_list = data.lists[0];
+
+
+            console.log("***** Latest Index****");
+            console.log(lastUpdatedListIndex($scope.lists));
+            var last_used_list = lastUpdatedListIndex($scope.lists);
+            if(last_used_list){
+                $scope.current_list = data.lists[last_used_list];
+            }else{
+                $scope.current_list = data.lists[0];
+            }
+
             currentListDetails($scope.current_list)
         })
         .error(function (data) {
@@ -122,7 +153,7 @@ function mainController($scope, $http){
     // ***************** Working with the local data ****************************
     $scope.addList = function () {
         console.log("Adding List!!");
-        var listObject = {list_name: $scope.myFormData.list_name, is_complete:false, tasks: [], is_local:true};
+        var listObject = {list_name: $scope.myFormData.list_name, is_complete:false, timestamp_updated:Math.floor(Date.now() / 1000) , tasks: [], is_local:true};
         $scope.myFormData = {};
         $scope.lists.push(listObject);
         $scope.uncomplete_lists = $scope.lists;
@@ -147,7 +178,9 @@ function mainController($scope, $http){
 
             $scope.lists = move($scope.lists, index, 0);
             $scope.current_list = $scope.lists[0];
+            $scope.lists[0].timestamp_updated = Math.floor(Date.now() / 1000);
             console.log($scope.current_list);
+
             currentListDetails($scope.current_list);
             //console.log($scope.current_list.list_name);
         }
@@ -187,6 +220,12 @@ function mainController($scope, $http){
 
     };
 
+    $scope.dateTest = function(){
+      console.log("********************* DATE TEST ******************************");
+      $scope.date = new Date();
+      console.log(Date.parse(s))
+    };
+
     $scope.deleteTask = function (task) {
         var index;
 
@@ -216,6 +255,29 @@ function mainController($scope, $http){
 
         if (index >= 0)
             $scope.lists[index].to_delete = true;
+
+        if ($scope.current_list == $scope.lists[index]){
+            var remaining_lists = [];
+
+            $scope.lists.some(function(entry, i){
+                if(!entry.to_delete){
+                    remaining_lists.push(entry);
+                }
+            });
+
+            console.log(remaining_lists);
+
+
+            if (remaining_lists.length >0){
+                $scope.current_list = remaining_lists[0];
+            }
+            else{
+                // No lists made.
+                // Todo: handle case where no lists remain.
+                // Option 1, unable to delete if there is only 1 list remaining?
+            }
+        }
+
     };
 
 
