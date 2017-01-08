@@ -26,8 +26,6 @@
 
     <link rel="stylesheet" href="ng-animate.css">
     <!-- md data table-->
-    <link rel="stylesheet" type="text/css" href="/static/md-data-table/md-data-table-style.css">
-    <script src="/static/md-data-table/md-data-table.js"></script>
 
 
 
@@ -58,7 +56,36 @@
                         <h4> Progress: {{current_list_details.percentage}}% Uncomplete: {{current_list_details.uncomplete_tasks}}</h4>
                     </div>
                     <div class="mdl-cell mdl-cell--2-col">
-                        <button class="mdl-button">Change List</button>
+                        <button class="mdl-button" ng-click="showList = !showList">Change List</button>
+                    </div>
+
+                    <div class="mdl-cell mdl-cell--12-col" ng-show="showList">
+                        <h4>My Lists</h4>
+                        <div id="list_list" ng-repeat="list in lists | filter: myFilter">
+
+
+                                <span ng-if="!list.is_complete" class="mdl-chip mdl-chip--contact mdl-chip--deletable">
+                                    <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white" ng-click="changeList(list)">D</span>
+                                    <span class="mdl-chip__text">{{list.list_name}} </span>
+                                    <a class="mdl-chip__action" ng-click="deleteList(list)"><i class="material-icons">cancel</i></a>
+                                </span>
+                                <span ng-if="list.is_complete" class="mdl-chip mdl-chip--contact mdl-chip--deletable">
+                                    <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white" ng-click="changeList(list)">Done</span>
+                                    <span class="mdl-chip__text">{{list.list_name}} </span>
+                                    <a class="mdl-chip__action" ng-click="deleteList(list)"><i class="material-icons">cancel</i></a>
+                                </span>
+
+                        </div>
+
+                        <form id="new_list_form">
+                            <div class="mdl-textfield mdl-js-textfield">
+                                <input class="mdl-textfield__input" type="text" id="new_list_name" ng-model="myFormData.list_name">
+                                <label class="mdl-textfield__label" for="new_list_name">List Name</label>
+                            </div>
+                            <button class="mdl-button mdl-js-button mdl-button--raised" ng-click="addList()">
+                                Add
+                            </button>
+                        </form>
                     </div>
 
 
@@ -79,50 +106,21 @@
                             </div>
 
                             <button type="submit" class="mdl-button mdl-js-button mdl-button--colored" ng-click="saveChanges()">Save Changes</i></button>
-                            <button class="mdl-button mdl-js-button mdl-button--colored" ng-click="addTask()">Add Local Task</button>
+
+                            <!-- New Task form-->
+                            <form id="new_task_form">
+                                <div class="mdl-textfield mdl-js-textfield">
+                                    <input class="mdl-textfield__input" type="text" id="new_task_name" ng-model="myFormData.task_name">
+                                    <label class="mdl-textfield__label" for="new_task_name">List Name</label>
+                                </div>
+                                <button type="submit" class="mdl-button mdl-js-button mdl-button--colored" ng-click="addTask()">Add Local Task</button>
+                            <!-- New Task form end-->
+                            </form>
+
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Current List and
-            <div class="mdl-cell mdl-cell--3-col"></div>
-            <div class="mdl-cell mdl-cell--6-col" style="text-align: center; border: 2px solid purple;">
-               Liste: {{current_list.list_name}}
-                <button type="button" class="mdl-button show-modal">Show Modal</button>
-
-            </div>
-            <div class="mdl-cell mdl-cell--3-col"></div>
-
-            -->
-
-            <!-- All Uncomplete Lists
-            <div class="mdl-cell mdl-cell--1-offset	 mdl-cell--2-col" id="list-section">
-                <h4>My Lists</h4>
-                <div ng-repeat="list in uncomplete_lists">
-                    <h2 ng-click="">{{ list.list_name}}</h2>
-                    <button ng-click="deleteToDoList(list._id)">
-                        Delete this list
-                    </button>
-                </div>
-            </div>
-            <div class="mdl-cell mdl-cell--3-col">
-                <h4>Tasks</h4>
-                <div ng-repeat="task in current_list.tasks" class="spin-toggle">
-                    <div >
-                        <h2>{{ task.task}} Status: {{task.isDone}}</h2>
-                        <button ng-click="deleteToDoTask(current_list._id, task._id)">
-                            Delete Item.
-                        </button>
-
-                        <button ng-click="completeToDoTask(current_list._id, task._id)">
-                            Set complete.
-                        </button>
-                    </div>
-                </div>
-            </div>
-            -->
-
 
 
             <!-- End Grid -->

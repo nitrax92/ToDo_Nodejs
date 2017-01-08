@@ -48,6 +48,7 @@ app.use('/views', express.static(__dirname + '/public/views'));
 
 // Load md-data-table to static available content
 app.use('/static/md-data-table',express.static(__dirname + '/node_modules/md-data-table/dist'));
+app.use('/static/js/move', express.static(__dirname + '/node_modules_array.prototype.move/src/'));
 
 /*
 var todoSchema = Schema({
@@ -101,200 +102,6 @@ app.get('/api/todos', function (req, res) {
 
 
 
-// Create a new entry and send back all after creation.
-app.post('/api/todos', function (req,res) {
-    Todo.create({
-        text:req.body.text,
-        done:false
-    }, function (err, todo) {
-        if (err)
-            res.send(err);
-
-
-    // Get and return all todos
-    Todo.find(function (err, all_todos) {
-        if(err)
-            req.send(err);
-
-        res.json(all_todos);
-        });
-    });
-});
-
-
-
-// Create a new List
-app.post('/api/todo/lists', function (req, res) {
-    ToDoLists.create({
-        list_name:req.body.list_name,
-        is_complete:false
-    }, function (err, todo_lists) {
-        if (err)
-            req.send(err);
-
-        //Get all uncomplete lists.
-        ToDoLists.find({is_complete: false},function(err, uncomplete_lists){
-            if (err)
-                req.send(err);
-
-            res.json(uncomplete_lists)
-        });
-        //Get all uncomplete lists.
-
-    })
-});
-
-
-// Change chosen list.
-app.get('/api/todo/lists/:list_id', function (req, res) {
-    var data = {};
-    console.log("Changing list.");
-    ToDoLists.find({_id: req.params.list_id}, function(err, current_list){
-        console.log(current_list);
-
-
-        data.current_list = current_list;
-
-        ToDoLists.find({is_complete: false},function(err, uncomplete_lists){
-            if (err)
-                req.send(err);
-
-            data.lists = uncomplete_lists;
-
-            res.send(data)
-        });
-    });
-});
-
-
-// Delete list
-app.delete('/api/todo/lists/remove/:list_id', function (req, res) {
-    var data = {};
-    console.log("Deleting id: " + req.param.list_id);
-    ToDoLists.remove({
-        _id : req.params.list_id
-    }, function (err, list) {
-        if (err)
-            res.send(err);
-
-
-        ToDoLists.find(function (err, all_lists) {
-            if (err)
-                res.send(err);
-
-            data.lists = all_lists;
-            res.json(data);
-        });
-
-    });
-});
-
-// Create new task within a list.
-app.post('/api/todo/lists/tasks', function (req, res) {
-   // Get the list form the ID.
-
-
-    //req.body.current_list.tasks.push({task: req.body.task_description, is_done: false});
-    var newTask = {task: req.body.task_description, isDone: false};
-    ToDoLists.update({_id: req.body.list_id}, {$push:{tasks:newTask}}, function (err) {
-        if (err)
-            res.send(err);
-        else
-            console.log("success!")
-    });
-
-
-
-
-    ToDoLists.find({_id: req.body.list_id},function (err, current_list) {
-        res.send(current_list);
-    })
-
-});
-
-
-// Delete a task within a list.
-app.delete('/api/todo/lists/tasks/:list_id/:task_id', function (req, res) {
-    // Find the list
-    // Find the object within the list
-    // Delete the object,
-    // return Updated list.
-
-
-
-    ToDoLists.update(
-        {_id:req.params.list_id},
-        {$pull: {tasks: {_id: [req.params.task_id]}}},
-        {},
-        function (error, data) {
-            if(error)
-                console.log("Update error.")
-
-            //Todo get updated list and send it back.
-            ToDoLists.find({_id: req.params.list_id}, function (error, current_list) {
-                current_list = current_list[0];
-
-                res.json(current_list);
-            })
-        }
-    );
-    }
-);
-
-app.get('/api/todo/lists/tasks/status/:list_id/:task_id', function (req, res) {
-
-
-    ToDoLists.update(
-        {'tasks._id': req.params.task_id},
-        {$set: {
-            'tasks.$.isDone': true
-        }}, function (err, affected_task) {
-
-            ToDoLists.find({_id: req.params.list_id}, function (error, current_list) {
-                current_list = current_list[0];
-
-                res.json(current_list);
-            })
-        }
-    )
-
-});
-
-
-//
-
-
-
-
-
-
-// Delete entry.
-app.delete('/api/todos/:todo_id', function (req, res) {
-    console.log(req.params.todo_id);
-    Todo.remove({
-        _id : req.params.todo_id
-    }, function (err, todo) {
-        if (err)
-            res.send(err);
-
-        // Get and return all entries again.
-        Todo.find(function(err, all_todos){
-            if (err)
-                res.send(err);
-
-            res.json(all_todos);
-        })
-    })
-});
-
-
-
-
-
-
-
-
-
 
 // ************************** Angular Data Handling ****************************
 app.post('/api/list/savechanges', function (req, res) {
@@ -315,8 +122,9 @@ app.post('/api/list/savechanges', function (req, res) {
         }
 
         // Delete all completed lists?
-        else if(current_list_object.is_complete || current_list_object.to_delete){
+        else if(current_list_object.to_delete){
             console.log("Delete complete or list that is set for deletion..")
+            deleteList(current_list_object)
         }
         else{
             console.log("EXISTING LIST");
@@ -356,13 +164,24 @@ function updateList(list_object){
     ToDoLists.update(
         {_id:list_object._id},
         {$set: {
-            tasks: list_object.tasks
-        }}, function (err, affected_list_object){
+            tasks: list_object.tasks,
+            is_complete: list_object.is_complete
+        }}, function (err, updated_list_object){
             if (err)
                 console.log(err)
         }
     )
+}
 
+
+function deleteList(list_object){
+    ToDoLists.remove(
+        {_id: list_object._id},
+        function (err, deleted_object) {
+            if (err)
+                console.log(err)
+        }
+    )
 }
 
 

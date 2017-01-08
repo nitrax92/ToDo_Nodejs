@@ -13,6 +13,29 @@ function mainController($scope, $http){
     $scope.current_list_index = 0;
     $scope.current_list_details = {percentage: 0, completed_tasks: 0, uncomplete_tasks: 0};
 
+
+
+
+
+
+
+
+    function updateListStatus (list, status) {
+        var index;
+        $scope.lists.some(function(entry, i){
+            if(entry == list){
+                index = i;
+                return true;
+            }
+        });
+
+
+        console.log(index);
+        if (index >= 0)
+            $scope.lists[index].is_complete = status;
+    };
+
+
     //Update list details.
     function currentListDetails(current_list){
         var complete = 0;
@@ -29,8 +52,37 @@ function mainController($scope, $http){
         if(current_list.tasks.length)
             percentage = Math.round((complete / current_list.tasks.length)*100);
 
+            if(percentage==100){
+                updateListStatus(current_list, true);
+                //$scope.current_list.is_done=true;
+            }
+            else{
+                updateListStatus(current_list, false);
+            }
+
 
         $scope.current_list_details = {percentage: percentage, completed_tasks:complete, uncomplete_tasks: uncomplete}
+    }
+
+
+
+    // Move object from one index to another.
+    // Code from http://www.w3resource.com/javascript-exercises/javascript-array-exercise-38.php
+    function move(arr, old_index, new_index) {
+        while (old_index < 0) {
+            old_index += arr.length;
+        }
+        while (new_index < 0) {
+            new_index += arr.length;
+        }
+        if (new_index >= arr.length) {
+            var k = new_index - arr.length;
+            while ((k--) + 1) {
+                arr.push(undefined);
+            }
+        }
+        arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+        return arr;
     }
 
 
@@ -45,6 +97,13 @@ function mainController($scope, $http){
         .error(function (data) {
             console.log('Error: ' + data);
         });
+
+    $scope.myFilter = function (item) {
+        if (item.to_delete)
+            return false;
+        else
+            return true;
+    };
 
     // Submitting add form.
     $scope.createTodo = function () {
@@ -63,16 +122,35 @@ function mainController($scope, $http){
     // ***************** Working with the local data ****************************
     $scope.addList = function () {
         console.log("Adding List!!");
-        var listObject = {list_name: $scope.myFormData.list_name, is_complete:false, tasks: {}, is_local:true};
-        console.log($scope.myFormData);
+        var listObject = {list_name: $scope.myFormData.list_name, is_complete:false, tasks: [], is_local:true};
+        $scope.myFormData = {};
         $scope.lists.push(listObject);
         $scope.uncomplete_lists = $scope.lists;
 
         console.log($scope.lists)
     };
 
-    $scope.changeList = function () {
-        console.log("Changing List!")
+    $scope.changeList = function (list_object) {
+        var index;
+        $scope.lists.some(function(entry, i){
+            if(entry == list_object){
+                console.log(entry.list_name);
+                index = i;
+                return true;
+            }
+        });
+
+        if(index >= 0){
+            // Move array at index to position 0
+            // Remove from the current positon
+            //$scope.lists.move($scope.lists, index, 0)
+
+            $scope.lists = move($scope.lists, index, 0);
+            $scope.current_list = $scope.lists[0];
+            console.log($scope.current_list);
+            currentListDetails($scope.current_list);
+            //console.log($scope.current_list.list_name);
+        }
     };
 
     $scope.saveChanges = function () {
@@ -89,7 +167,8 @@ function mainController($scope, $http){
     };
 
     $scope.addTask = function () {
-        var task_object = {task: "My Local Task", is_done:false};
+        var task_object = {task: $scope.myFormData.task_name, is_done:false};
+        $scope.myFormData = {};
         $scope.current_list.tasks.push(task_object);
 
         // Edit existing list object to match updated current_list
@@ -124,6 +203,22 @@ function mainController($scope, $http){
             $scope.current_list.tasks.splice(index, 1);
             currentListDetails($scope.current_list)
     };
+
+    $scope.deleteList = function (list){
+        var index;
+
+        $scope.lists.some(function(entry, i){
+            if(entry == list){
+                index = i;
+                return true;
+            }
+        });
+
+        if (index >= 0)
+            $scope.lists[index].to_delete = true;
+    };
+
+
     
     $scope.taskStatus = function (task) {
         var index;
@@ -145,6 +240,9 @@ function mainController($scope, $http){
     };
 
 
+
+
+    // **********************************************************************************
 
     //New To Do Item.
     $scope.createTodo = function () {
