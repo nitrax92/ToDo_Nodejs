@@ -10,23 +10,53 @@ body{
 
 html {overflow-y: scroll}
 
+.tasks_lists_view{
+    padding: 10px;
+    overflow: visible;
+}
 
 body {}
 
 .view{
     position: absolute;
+    top: 130px;
 }
 
 .show-border{
-    /* border: 5px solid midnightblue; */
+    /*border: 5px solid midnightblue; */
     padding: 10px;
 }
 
 .individual-window{
     background-color: #e3eeee;
-    border: 5px solid #FFD393;
+    /*padding: 15px; */
+    overflow: visible;
+    padding-bottom: 50px;
+    margin: 100px; !important;
+
+    border: 3px solid #405952;
+    /*border: 5px solid #FFD393;*/
 }
 
+.task_window{
+    overflow: visible;
+    position: relative;
+}
+
+.list_window{
+    overflow: visible;
+    position: relative;
+    text-align: center;
+}
+
+.floating_button{
+    position: absolute;
+    bottom: -30px;
+    right: 30px;
+    overflow: auto;
+}
+
+/*Styling for lists*/
 .completed_task{
     padding: 100px;
     border-radius: 20px;
@@ -47,6 +77,19 @@ body {}
     background: linear-gradient(to right, #FFD393 , #FF974F); /* Standard syntax */
 }
 
+
+.completed_list{
+    border-radius: 5px;
+    background: forestgreen; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left, forestgreen , lightgreen); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, lightgreen, forestgreen); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, lightgreen, forestgreen); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right,#405952,lightgreen); /* Standard syntax */
+}
+
+.uncomplete_list{
+
+}
 .task-menu-item{
     font-size: 16pt;
     display: flex;
@@ -66,8 +109,11 @@ body {}
     background-color: #9C9B7A;
 }
 #header-text{
-    text-align: center;
-
+    /*text-align: center; */
+    display: flex;
+    justify-content: center; /* align horizontal */
+    align-items: center; /* align vertical */
+    height: 100px;
     border: 5px solid #405952;
     -webkit-border-radius: 10px;
     -moz-border-radius:10px;
@@ -78,7 +124,8 @@ body {}
 }
 
 
-.mdl-grid.center-items {
+.center-items {
+    position: relative;
     justify-content: center;
 }
 
@@ -101,73 +148,14 @@ h1{
     text-align: center;
 }
 
-
-.mdl-list .mdl-list__item{
-    /*border-bottom: 1px black solid; */
-    background-color: #FFD393;
-    margin-top: 2px;
-    margiin-bottom: 2px;
-    border-radius: 2px;
-
-    padding-left: 83px;
-    background-color: #fff;
-    background-image:
-    linear-gradient(90deg, transparent 79px, #abced4 79px, #abced4 81px, transparent 81px),
-    linear-gradient(#eee .1em, transparent .1em);
-    background-size: 100% 1.2em;
-}
-
-.mdl-list .mdl-list__item:hover{
-    /*border-bottom: 1px black solid; */
-    background-color: #9C9B7A;
+.mdl-list__item-primary-content:hover{
     cursor: pointer;
-    margin-top: 5px;
-    margin-bottom: 5px;
-
-    background-color: #fff;
-    background-image:
-    linear-gradient(90deg, transparent 79px, #abced4 79px, #abced4 81px, transparent 81px),
-    linear-gradient(#eee .1em, transparent .1em);
-    background-size: 100% 1.2em;
 }
 
 
 
-#Animations
-    /*
-      We're using CSS transitions for when
-      the enter and move events are triggered
-      for the element that has the .repeated-item
-      class
-    */
-.repeated-item.ng-enter, .repeated-item.ng-move {
-    transition: all 0.5s linear;
-    opacity: 0;
+.task-menu-item{
+    text-align: center;
+    padding: 10px;
 }
-
-/*
- The ng-enter-active and ng-move-active
- are where the transition destination properties
- are set so that the animation knows what to
- animate.
-*/
-.repeated-item.ng-enter.ng-enter-active,
-.repeated-item.ng-move.ng-move-active {
-    opacity: 1;
-}
-
-/*
-  We're using CSS keyframe animations for when
-  the leave event is triggered for the element
-  that has the .repeated-item class
-*/
-.repeated-item.ng-leave {
-    animation: 0.5s my_animation;
-}
-
-@keyframes my_animation {
-    from { opacity:1; }
-    to { opacity:0; }
-}
-
 
