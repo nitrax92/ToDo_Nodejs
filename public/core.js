@@ -63,7 +63,7 @@ function mainController($scope, $http){
             }
 
 
-        $scope.current_list_details = {percentage: percentage, completed_tasks:complete, uncomplete_tasks: uncomplete}
+        $scope.current_list_details = {percentage: percentage, completed_tasks:complete, uncomplete_tasks: uncomplete};
     }
 
 
@@ -200,23 +200,27 @@ function mainController($scope, $http){
     };
 
     $scope.addTask = function () {
-        var task_object = {task: $scope.myFormData.task_name, is_done:false};
-        $scope.myFormData = {};
-        $scope.current_list.tasks.push(task_object);
+        if ($scope.myFormData.task_name){
+            console.log($scope.myFormData.task_name);
+            var task_object = {task: $scope.myFormData.task_name, is_done:false};
+            $scope.myFormData = {};
+            $scope.current_list.tasks.push(task_object);
 
-        // Edit existing list object to match updated current_list
-        //$scope.lists.find({list_name: current_list.list_name});
-        var index;
-        $scope.lists.some(function(entry, i){
-           if(entry == $scope.current_list){
-               console.log(entry.list_name);
-               index = i;
-               return true;
-           }
-        });
-        $scope.lists[index] = $scope.current_list;
-        currentListDetails($scope.current_list);
-        console.log($scope.current_list)
+            // Edit existing list object to match updated current_list
+            //$scope.lists.find({list_name: current_list.list_name});
+            var index;
+            $scope.lists.some(function(entry, i){
+                if(entry == $scope.current_list){
+                    console.log(entry.list_name);
+                    index = i;
+                    return true;
+                }
+            });
+            $scope.lists[index] = $scope.current_list;
+            currentListDetails($scope.current_list);
+            console.log($scope.current_list)
+        }
+
 
     };
 

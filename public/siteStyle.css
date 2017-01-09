@@ -13,6 +13,48 @@ html {overflow-y: scroll}
 
 body {}
 
+.view{
+    position: absolute;
+}
+
+.show-border{
+    /* border: 5px solid midnightblue; */
+    padding: 10px;
+}
+
+.individual-window{
+    background-color: #e3eeee;
+    border: 5px solid #FFD393;
+}
+
+.completed_task{
+    padding: 100px;
+    border-radius: 20px;
+    background: forestgreen; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left, forestgreen , lightgreen); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, forestgreen, lightgreen); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, forestgreen, lightgreen); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right,lightgreen, #405952 ); /* Standard syntax */
+}
+
+.uncomplete_task{
+    padding: 100px;
+    border-radius: 20px;
+    background: #FFD393; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left, #FFD393 , #FF974F); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, #FFD393, #FF974F); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, #FFD393, #FF974F); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, #FFD393 , #FF974F); /* Standard syntax */
+}
+
+.task-menu-item{
+    font-size: 16pt;
+    display: flex;
+    justify-content: center; /* align horizontal */
+    align-items: center; /* align vertical */
+
+}
+
 
 #todo-list{margin-bottom: 30px;}
 
