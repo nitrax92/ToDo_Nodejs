@@ -23,7 +23,7 @@ body {}
 }
 
 .show-border{
-    /*border: 5px solid midnightblue; */
+    border: 5px solid midnightblue;
     padding: 10px;
 }
 
@@ -79,7 +79,6 @@ body {}
 
 
 .completed_list{
-    border-radius: 5px;
     background: forestgreen; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(left, forestgreen , lightgreen); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(right, lightgreen, forestgreen); /* For Opera 11.1 to 12.0 */
@@ -88,6 +87,11 @@ body {}
 }
 
 .uncomplete_list{
+    background: #FFD393; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left, #FFD393 , #FF974F); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, #FFD393, #FF974F); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, #FFD393, #FF974F); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, #FFD393 , #FF974F); /* Standard syntax */
 
 }
 .task-menu-item{
