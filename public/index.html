@@ -24,6 +24,10 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular-animate.js"></script>
     <script src="core.js"></script>
 
+    <!-- Polyfill -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.4/dialog-polyfill.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.4/dialog-polyfill.min.css">
+
     <link rel="stylesheet" href="ng-animate.css">
     <!-- md data table-->
 
@@ -32,13 +36,52 @@
 
 </head>
 <body ng-controller="mainController">
+<!-- New Task Dialog -->
+<dialog class="mdl-dialog" id="new_task_modal">
+    <form>
+        <div class="mdl-dialog__content">
+            <h3>New Task</h3>
+            <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="task_name_input" ng-model="myFormData.task_name">
+                <label class="mdl-textfield__label" for="task_name_input">Task Description</label>
+            </div>
+        </div>
+        <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
+
+            <button type="submit" class="mdl-button mdl-js-button mdl-button--colored add_task"  ng-click="addTask()">Add Task</button>
+            <!-- New Task form end-->
+            <button type="button" class="mdl-button close">Close</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- New List Dialog -->
+<dialog class="mdl-dialog" id="new_list_modal">
+    <form>
+        <div class="mdl-dialog__content">
+            <h3>New List</h3>
+            <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="list_name_input" ng-model="myFormData.list_name">
+                <label class="mdl-textfield__label" for="list_name_input">List Name</label>
+            </div>
+        </div>
+        <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
+
+            <button type="submit" class="mdl-button mdl-js-button mdl-button--colored add_list"  ng-click="addList()">Add List</button>
+            <!-- New Task form end-->
+            <button type="button" class="mdl-button close_list_modal">Close</button>
+        </div>
+    </form>
+</dialog>
+
 
 <div class="mdl-layout mdl-js-layout">
-
-
-
     <main class="mdl-layout__content">
         <div class="mdl-grid center-items">
+
+
+            <div class="mdl-cell mdl-cell--3-col mdl-grid">
+            </div>
 
             <div class="mdl-cell mdl-cell--6-col mdl-grid" id="header-text">
                 <div class="mdl-cell mdl-cell--3-offset mdl-cell--6-col">
@@ -50,8 +93,12 @@
                 </div>
 
             </div>
-
-
+            <div class="mdl-cell mdl-cell--3-col mdl-grid">
+            </div>
+            <div class="mdl-cell mdl-cell--1-col mdl-grid">
+            </div>
+            <div class="view mdl-cell mdl-cell--6-col mdl-grid">
+            </div>
             <!-- Tasks and Lists -->
             <div class="view mdl-cell mdl-cell--6-col slide-left tasks_lists_view" ng-show="!showList">
                 <div class="mdl-grid">
@@ -262,85 +309,52 @@
 
     </main>
 
-    <!-- New Task Dialog -->
-    <dialog class="mdl-dialog" id="new_task_modal">
-        <form>
-        <div class="mdl-dialog__content">
-            <h3>New Task</h3>
-            <div class="mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input" type="text" id="task_name_input" ng-model="myFormData.task_name">
-                <label class="mdl-textfield__label" for="task_name_input">Task Description</label>
-            </div>
-        </div>
-        <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
-
-            <button type="submit" class="mdl-button mdl-js-button mdl-button--colored add_task"  ng-click="addTask()">Add Task</button>
-            <!-- New Task form end-->
-            <button type="button" class="mdl-button close">Close</button>
-        </div>
-        </form>
-    </dialog>
 
 
-    <!-- New List Dialog -->
-    <dialog class="mdl-dialog" id="new_list_modal">
-        <form>
-        <div class="mdl-dialog__content">
-            <h3>New List</h3>
-            <div class="mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input" type="text" id="list_name_input" ng-model="myFormData.list_name">
-                <label class="mdl-textfield__label" for="list_name_input">List Name</label>
-            </div>
-        </div>
-        <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
-
-            <button type="submit" class="mdl-button mdl-js-button mdl-button--colored add_list"  ng-click="addList()">Add List</button>
-            <!-- New Task form end-->
-            <button type="button" class="mdl-button close_list_modal">Close</button>
-        </div>
-        </form>
-    </dialog>
 
 
-    <script>
-        var dialog = document.querySelector('#new_task_modal');
-
-        var showModalButton = document.querySelector('.show_new_task_modal');
-
-        if (! dialog.showModal) {
-            dialogPolyfill.registerDialog(dialog);
-        }
-        showModalButton.addEventListener('click', function() {
-            dialog.showModal();
-        });
-
-        dialog.querySelector('.add_task').addEventListener('click', function() {
-            dialog.close();
-        });
-        dialog.querySelector('.close').addEventListener('click', function() {
-            dialog.close();
-        });
-
-        var new_list_dialog = document.querySelector('#new_list_modal');
-        var showListModalButton = document.querySelector('.show_new_list_modal');
-        if(! new_list_dialog.showModal){
-            dialogPolyfill.registerDialog(new_list_dialog);
-        }
-        showListModalButton.addEventListener('click', function () {
-            new_list_dialog.showModal();
-        });
-
-        new_list_dialog.querySelector('.add_list').addEventListener('click', function() {
-            new_list_dialog.close();
-        });
-        new_list_dialog.querySelector('.close_list_modal').addEventListener('click', function() {
-            new_list_dialog.close();
-        });
-
-
-    </script>
 
 </div>
 
+
 </body>
+
+
+
+<script>
+    var dialog = document.querySelector('#new_task_modal');
+
+    var showModalButton = document.querySelector('.show_new_task_modal');
+
+    if (! dialog.showModal) {
+        dialogPolyfill.registerDialog(dialog);
+    }
+    showModalButton.addEventListener('click', function() {
+        dialog.showModal();
+    });
+
+    dialog.querySelector('.add_task').addEventListener('click', function() {
+        dialog.close();
+    });
+    dialog.querySelector('.close').addEventListener('click', function() {
+        dialog.close();
+    });
+
+    var new_list_dialog = document.querySelector('#new_list_modal');
+    var showListModalButton = document.querySelector('.show_new_list_modal');
+    if(! new_list_dialog.showModal){
+        dialogPolyfill.registerDialog(new_list_dialog);
+    }
+    showListModalButton.addEventListener('click', function () {
+        new_list_dialog.showModal();
+    });
+
+    new_list_dialog.querySelector('.add_list').addEventListener('click', function() {
+        new_list_dialog.close();
+    });
+    new_list_dialog.querySelector('.close_list_modal').addEventListener('click', function() {
+        new_list_dialog.close();
+    });
+
+</script>
 </html>
