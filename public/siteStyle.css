@@ -59,6 +59,7 @@ body {}
 /*Styling for lists*/
 .completed_task{
     padding: 100px;
+
     border-radius: 20px;
     background: forestgreen; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(left, forestgreen , lightgreen); /* For Safari 5.1 to 6.0 */
@@ -102,6 +103,12 @@ body {}
 
 }
 
+.task_description_text{
+    font-size: 14pt;
+    display: flex;
+    justify-content: center; /* align horizontal */
+    align-items: center; /* align vertical */
+}
 
 #todo-list{margin-bottom: 30px;}
 
