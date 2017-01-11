@@ -58,11 +58,6 @@ var todoSchema = Schema({
 });
 */
 // Project Models
-var Todo = mongoose.model('Todo', {
-    text: String
-});
-
-
 var ToDoLists = mongoose.model('Todo_lists',
 
     //Schema
@@ -90,7 +85,6 @@ app.get('/api/todos', function (req, res) {
     ToDoLists.find(function (err, all_lists) {
         if (err)
             res.send(err);
-        console.log("Sorted?");
         data.lists = all_lists;
         res.json(data);
     });

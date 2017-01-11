@@ -33,7 +33,6 @@
 
 
 
-
 </head>
 <body ng-controller="mainController">
 <!-- New Task Dialog -->
@@ -91,17 +90,10 @@
             <!-- Navigation -->
             <nav class="mdl-navigation mdl-layout--large-screen-only">
                 <a class="mdl-navigation__link navigation_link" ng-click="saveChanges()" href="">Save Changes</a>
-                <a class="mdl-navigation__link navigation_link" ng-click="showList = !showList" href="">Change View</a>
-            </nav>
-        </div>
-    </header>
-    <div class="mdl-layout__drawer mdl-layout--small-screen-only">
-        <span class="mdl-layout-title">My To Do List</span>
-        <nav class="mdl-navigation">
-            <a class="mdl-navigation__link" ng-click="showList = !showList" href="">Save Changes</a>
-            <a class="mdl-navigation__link" href="">Change View</a>
+            <a class="mdl-navigation__link navigation_link" ng-click="showList = !showList" href="">Change View</a>
         </nav>
     </div>
+    </header>
 
 
 
@@ -109,27 +101,7 @@
     <main class="mdl-layout__content">
         <div class="mdl-grid center-items">
 
-
-            <!--
-            <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone">
-            </div>
-
-            <div class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing" id="header-text">
-                <div class="mdl-cell mdl-cell--3-offset-desktop mdl-cell--6-col">
-                    <h1>My To Do List</h1>
-                </div>
-                <div class="mdl-cell mdl-cell--2-col">
-                    <button class="mdl-button mdl-js-button" ng-click="showList = !showList">Change View</button>
-                    <button type="submit" class="mdl-button mdl-js-button mdl-button--colored" ng-click="saveChanges()"><i class="material-icons">save</i> Save Changes</i></button>
-                </div>
-
-            </div>
-            <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone">
-            </div>
-                 -->
-
-            <!-- Tasks and Lists -->
-            <div class="view mdl-cell mdl-cell--8-col slide-left tasks_lists_view" ng-show="!showList">
+            <div class="view mdl-cell mdl-cell--8-col slide-left tasks_lists_view" ng-show="showList">
                 <div class="mdl-grid">
                     <!-- Tasks Box -->
                     <div class="mdl-grid mdl-grid--no-spacing mdl-cell mdl-cell--12-col individual-window" style="justify-content: center;">
@@ -150,6 +122,7 @@
                             {{current_list_details.percentage}}%
                         </div>
                     </div>
+
 
 
                     <div class="mdl-cell mdl-cell--8-col individual-window task_window">
@@ -195,7 +168,7 @@
                             <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored show_new_task_modal" id="new_task_button">
                                 <i class="material-icons">add</i>
                             </button>
-                            <div class="mdl-tooltip mdl-tooltip--large" for="new_task_button">
+                            <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--top" for="new_task_button">
                                 Add a new task
                             </div>
                         </div>
@@ -237,11 +210,11 @@
                         </ul>
 
                         <div class="floating_button">
-                            <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored show_new_list_modal" id="new_task_button">
+                            <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored show_new_list_modal" id="new_list_button">
                                 <i class="material-icons">add</i>
                             </button>
-                            <div class="mdl-tooltip mdl-tooltip--large" for="new_task_button">
-                                Add a new task
+                            <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--top" for="new_list_button">
+                                Add a new list
                             </div>
                         </div>
 
@@ -250,9 +223,10 @@
                 </div>
             </div>
 
-
-            <!-- Tasks -->
-            <div class="view mdl-cell mdl-cell--8-col slide-right" ng-show="showList">
+            <!-- ********************************************************************************** -->
+            <!-- ********************************   TASKS WINDOW   ******************************** -->
+            <!-- ********************************************************************************** -->
+            <div class="view mdl-cell mdl-cell--8-col slide-left" ng-show="!showList">
                 <div class="mdl-grid">
 
                     <!-- Tasks Box -->
@@ -279,7 +253,7 @@
                         <div id="task_list">
 
                             <h3><b>Tasks</b></h3>
-                            <div ng-repeat="task in current_list.tasks | orderBy: 'is_done'" class="slide-down">
+                            <div ng-repeat="task in current_list.tasks | filter: {is_done:false} | orderBy: 'is_done'" class="slide-down">
                                 <!-- Task is set as done -->
                                 <div class="mdl-grid mdl-cell mdl-cell--12-col completed_task"  ng-if="task.is_done">
 
@@ -313,6 +287,8 @@
                             </div>
                         </div>
 
+                        <hr ng-if="current_list_details.uncomplete_tasks!=0">
+                        <h3 ng-if="current_list_details.uncomplete_tasks!=0">Completed Tasks</h3>
 
                         <div class="floating_button">
                             <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored show_new_task_modal_taskview" id="new_task_button_taskview">
@@ -322,7 +298,66 @@
                                 Add a new task
                             </div>
                         </div>
+
+                        <div class="floating_view_button">
+                            <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" ng-click="list_dropdown_view = !list_dropdown_view" id="display_lists_button">
+                                <i ng-if="!list_dropdown_view" class="material-icons">arrow_downward</i>
+                                <i ng-if="list_dropdown_view" class="material-icons">arrow_upward</i>
+                            </button>
+                            <div class="mdl-tooltip mdl-tooltip--large" for="display_lists_button">
+                                See the lists.
+                            </div>
+                        </div>
                     </div>
+
+
+
+
+                    <!-- Lists Dropdown -->
+                    <div class="mdl-cell mdl-cell--12-col individual-window list_dropdown_window slide-down" ng-show="list_dropdown_view">
+                        <h3><b>Lists</b></h3>
+                        <ul id="list_list" ng-repeat="list in lists | filter: myFilter| orderBy: '-timestamp_updated'" class="mdl-list slide-right"> <!-- filter: {is_done:true}  -->
+
+
+                            <li  ng-if="list.is_complete" class="mdl-list__item mdl-list__item--two-line completed_list">
+                                <span class="mdl-list__item-primary-content" ng-click="changeList(list)">
+                                  <i class="material-icons mdl-list__item-icon">check</i>
+                                  <span><b>{{list.list_name}}</b></span>
+                                  <span class="mdl-list__item-sub-title">{{list.tasks.length}} Tasks</span>
+                                </span>
+                                <span class="mdl-list__item-secondary-content">
+
+                                  <button class="mdl-list__item-secondary-action mdl-button mdl-js-button mdl-button--icon" ng-click="deleteList(list)"><i class="material-icons">delete</i></button>
+                                </span>
+                                <hr>
+                            </li>
+
+
+                            <li  ng-if="!list.is_complete" class="mdl-list__item mdl-list__item--two-line uncomplete_list">
+                                <span class="mdl-list__item-primary-content" ng-click="changeList(list)">
+                                  <i class="material-icons mdl-list__item-icon">event_note</i>
+                                  <span><b>{{list.list_name}}</b></span>
+                                  <span class="mdl-list__item-sub-title">{{list.tasks.length}} Tasks</span>
+                                </span>
+                                <span class="mdl-list__item-secondary-content">
+
+                                  <button class="mdl-list__item-secondary-action mdl-button mdl-js-button mdl-button--icon" ng-click="deleteList(list)"><i class="material-icons">delete</i></button>
+                                </span>
+                                <hr>
+                            </li>
+
+                        </ul>
+
+                        <div class="floating_button">
+                            <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored show_new_list_modal" id="new_list_button">
+                                <i class="material-icons">add</i>
+                            </button>
+                            <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--top" for="new_list_button">
+                                Add a new list
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

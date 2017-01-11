@@ -1,10 +1,3 @@
-@media only screen and (min-width:851px){
-    .mdl-layout__drawer-button {
-        display: none;
-    }
-}
-
-
 
 body{
     background-image: url('img/background_typewriter.jpg');
@@ -28,22 +21,23 @@ html {overflow-y: scroll}
 }
 
 .mdl-layout-title{
-    color: black;
+    color: #FFD393;
     font-size: xx-large !important;
 }
 
-.navigation_link{
-    color: black !important;
+.navigation_link, .mdl-layout__drawer-button{
+    color: #FFD393 !important;
 }
 
 .mdl-layout__header-row{
-    background:#FFD393 ;
-    background: linear-gradient(to right, #405952, #9C9B7A, #9C9B7A , #9C9B7A);;
+    background:rgba(64,89,82,0.5);
+    /*background:#FFD393 ;
+    background: linear-gradient(to right, #405952, #9C9B7A, #9C9B7A , #9C9B7A); */
 }
 
 .mdl-layout__drawer{
-    background: linear-gradient(#405952, #9C9B7A, #9C9B7A , #9C9B7A) !important;
-    color: black !important;
+    background:rgba(64,89,82,0.5)!important;
+    color: #FFD393 !important;
 }
 
 .mdl-navigation__link{
@@ -53,12 +47,10 @@ html {overflow-y: scroll}
 .individual-window{
     color: black;
     background-color: #FFD393;
-    /*padding: 15px; */
+    padding: 20px;
     overflow: visible;
-    padding-bottom: 50px;
-    margin: 100px; !important;
+    margin-bottom: 20px !important;
     justify-content: center;
-
     border: 3px solid #405952;
     /*border: 5px solid #FFD393;*/
 }
@@ -79,6 +71,23 @@ html {overflow-y: scroll}
     bottom: -30px;
     right: 30px;
     overflow: auto;
+}
+
+.floating_view_button{
+    position: absolute;
+    bottom: -30px;
+    left: 30px;
+    overflow: auto;
+}
+
+.list_dropdown_window{
+    text-align: center;
+}
+
+hr{
+    height: 5px !important;
+    background-color: #405952;
+    border-radius: 2px;
 }
 
 /*Styling for lists*/
