@@ -1,3 +1,11 @@
+@media only screen and (min-width:851px){
+    .mdl-layout__drawer-button {
+        display: none;
+    }
+}
+
+
+
 body{
     background-image: url('img/background_typewriter.jpg');
     background-repeat: no-repeat;
@@ -11,28 +19,45 @@ body{
 html {overflow-y: scroll}
 
 .tasks_lists_view{
-    padding: 10px;
+
     overflow: visible;
 }
 
-body {}
-
 .view{
     position: absolute;
-    top: 130px;
 }
 
-.show-border{
-    border: 5px solid midnightblue;
-    padding: 10px;
+.mdl-layout-title{
+    color: black;
+    font-size: xx-large !important;
+}
+
+.navigation_link{
+    color: black !important;
+}
+
+.mdl-layout__header-row{
+    background:#FFD393 ;
+    background: linear-gradient(to right, #405952, #9C9B7A, #9C9B7A , #9C9B7A);;
+}
+
+.mdl-layout__drawer{
+    background: linear-gradient(#405952, #9C9B7A, #9C9B7A , #9C9B7A) !important;
+    color: black !important;
+}
+
+.mdl-navigation__link{
+    color: black !important;
 }
 
 .individual-window{
-    background-color: #e3eeee;
+    color: black;
+    background-color: #FFD393;
     /*padding: 15px; */
     overflow: visible;
     padding-bottom: 50px;
     margin: 100px; !important;
+    justify-content: center;
 
     border: 3px solid #405952;
     /*border: 5px solid #FFD393;*/
@@ -75,7 +100,7 @@ body {}
     background: -webkit-linear-gradient(left, #FFD393 , #FF974F); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(right, #FFD393, #FF974F); /* For Opera 11.1 to 12.0 */
     background: -moz-linear-gradient(right, #FFD393, #FF974F); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(to right, #FFD393 , #FF974F); /* Standard syntax */
+    background: linear-gradient(to right, #FF974F , #ff9328); /* Standard syntax */
 }
 
 
@@ -119,6 +144,8 @@ body {}
 #list-section{
     background-color: #9C9B7A;
 }
+
+
 #header-text{
     /*text-align: center; */
     display: flex;
@@ -140,9 +167,7 @@ body {}
     justify-content: center;
 }
 
-.mdl-layout__content{
-    padding-top: 150px;
-}
+
 
 
 

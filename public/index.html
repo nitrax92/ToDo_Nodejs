@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>My To Do Application.</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Styling and Front-end framework -->
     <!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">load bootstrap -->
@@ -75,32 +75,64 @@
 </dialog>
 
 
-<div class="mdl-layout mdl-js-layout">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+    <header class="mdl-layout__header mdl-layout__header--transparent ">
+        <div class="mdl-layout__header-row">
+            <!-- Title -->
+            <div class="mdl-layout-spacer"></div>
+            <div class="mdl-layout-spacer mdl-layout--large-screen-only"></div>
+            <div class="mdl-layout-spacer mdl-layout--large-screen-only"></div>
+
+            <span class="mdl-layout-title"><b>My To Do List</b></span>
+            <!-- Add spacer, to align navigation to the right -->
+            <div class="mdl-layout-spacer mdl-layout--large-screen-only"></div>
+            <div class="mdl-layout-spacer"></div>
+            <!-- Navigation -->
+            <nav class="mdl-navigation mdl-layout--large-screen-only">
+                <a class="mdl-navigation__link navigation_link" ng-click="saveChanges()" href="">Save Changes</a>
+                <a class="mdl-navigation__link navigation_link" ng-click="showList = !showList" href="">Change View</a>
+            </nav>
+        </div>
+    </header>
+    <div class="mdl-layout__drawer mdl-layout--small-screen-only">
+        <span class="mdl-layout-title">My To Do List</span>
+        <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" ng-click="showList = !showList" href="">Save Changes</a>
+            <a class="mdl-navigation__link" href="">Change View</a>
+        </nav>
+    </div>
+
+
+
+
     <main class="mdl-layout__content">
         <div class="mdl-grid center-items">
 
 
-            <div class="mdl-cell mdl-cell--3-col">
+            <!--
+            <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone">
             </div>
 
-            <div class="mdl-cell mdl-cell--6-col mdl-grid" id="header-text">
-                <div class="mdl-cell mdl-cell--3-offset mdl-cell--6-col">
+            <div class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing" id="header-text">
+                <div class="mdl-cell mdl-cell--3-offset-desktop mdl-cell--6-col">
                     <h1>My To Do List</h1>
                 </div>
-                <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-cell mdl-cell--2-col">
                     <button class="mdl-button mdl-js-button" ng-click="showList = !showList">Change View</button>
                     <button type="submit" class="mdl-button mdl-js-button mdl-button--colored" ng-click="saveChanges()"><i class="material-icons">save</i> Save Changes</i></button>
                 </div>
 
             </div>
-            <div class="mdl-cell mdl-cell--3-col">
+            <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone">
             </div>
+                 -->
 
             <!-- Tasks and Lists -->
-            <div class="view mdl-cell mdl-cell--6-col slide-left tasks_lists_view" ng-show="!showList">
+            <div class="view mdl-cell mdl-cell--8-col slide-left tasks_lists_view" ng-show="!showList">
                 <div class="mdl-grid">
                     <!-- Tasks Box -->
-                    <div class="mdl-grid mdl-grid--no-spacing mdl-cell mdl-cell--12-col individual-window">
+                    <div class="mdl-grid mdl-grid--no-spacing mdl-cell mdl-cell--12-col individual-window" style="justify-content: center;">
                         <div class="mdl-cell mdl-cell--12-col task-menu-item">
                             <h3>Current List:<b>{{current_list.list_name}}</b></h3>
 
@@ -202,40 +234,6 @@
                                 <hr>
                             </li>
 
-                            <!--
-                           <div ng-if="list.is_complete"  class="mdl-grid mdl-cell mdl-cell--12-col completed_list">
-
-
-                               <div class="cell mdl-cell--2-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-                                   <button type="button" class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">thumb_up</i></button>
-                               </div>
-                               <div class="cell mdl-cell--8-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
-                                   {{list.list_name}} Tasks: {{list.tasks.length}}
-                               </div>
-
-                               <div class="cell mdl-cell--2-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-                                   <button type="button" class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">delete</i></button>
-                               </div>
-
-
-                            </div>
-                            <span ng-if="!list.is_complete"   class="mdl-chip mdl-chip--contact mdl-chip--deletable">
-                                <img class="mdl-chip__contact" ng-click="changeList(list)" src="/img/icons/uncomplete_list.png">
-                                <span class="mdl-chip__text">{{list.list_name}} Date: {{list.timestamp_updated}}</span>
-                                <a class="mdl-chip__action" ng-click="deleteList(list)"><i class="material-icons">cancel</i></a>
-                            </span>
-
-
-
-
-                            <span ng-if="list.is_complete" class="mdl-chip mdl-chip--contact mdl-chip--deletable">
-                                <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white" ng-click="changeList(list)"><i class="material-icons">assignment_turned_in</i></span>
-                                <span class="mdl-chip__text">{{list.list_name}} </span>
-                                <a class="mdl-chip__action" ng-click="deleteList(list)"><i class="material-icons">cancel</i></a>
-                            </span>
-
-                            -->
-
                         </ul>
 
                         <div class="floating_button">
@@ -254,13 +252,13 @@
 
 
             <!-- Tasks -->
-            <div class="view mdl-cell mdl-cell--6-col slide-right" ng-show="showList">
+            <div class="view mdl-cell mdl-cell--8-col slide-right" ng-show="showList">
                 <div class="mdl-grid">
 
                     <!-- Tasks Box -->
                     <div class="mdl-grid mdl-grid--no-spacing mdl-cell mdl-cell--12-col individual-window">
                         <div class="mdl-cell mdl-cell--12-col task-menu-item">
-                            <h3>Current List:<b>{{current_list.list_name}}</b></h3>
+                            <h3><b>{{current_list.list_name}}</b></h3>
 
                         </div>
                         <div class="mdl-cell mdl-cell--3-col mdl-cell--8-col-tablet task-menu-item">
