@@ -9,15 +9,10 @@ body{
     font-family: 'Roboto', 'Helvetica', sans-serif;
 }
 
-html {overflow-y: scroll}
 
 .tasks_lists_view{
 
     overflow: visible;
-}
-
-.view{
-    position: absolute;
 }
 
 .mdl-layout-title{
@@ -35,6 +30,8 @@ html {overflow-y: scroll}
     background: linear-gradient(to right, #405952, #9C9B7A, #9C9B7A , #9C9B7A); */
 }
 
+/* ************* */
+
 .mdl-layout__drawer{
     background:rgba(64,89,82,0.5)!important;
     color: #FFD393 !important;
@@ -42,17 +39,6 @@ html {overflow-y: scroll}
 
 .mdl-navigation__link{
     color: black !important;
-}
-
-.individual-window{
-    color: black;
-    background-color: #FFD393;
-    padding: 20px;
-    overflow: visible;
-    margin-bottom: 20px !important;
-    justify-content: center;
-    border: 3px solid #405952;
-    /*border: 5px solid #FFD393;*/
 }
 
 .task_window{
@@ -66,12 +52,45 @@ html {overflow-y: scroll}
     text-align: center;
 }
 
-.floating_button{
+
+.list_dropdown_window{
+    text-align: center;
+    position: relative;
+}
+
+
+.individual-window{
+    color: black;
+    background-color: #FFD393;
+    padding: 20px;
+    overflow: visible;
+    margin-bottom: 20px !important;
+    justify-content: center;
+    border: 3px solid #405952;
+    /*border: 5px solid #FFD393;*/
+}
+
+
+
+
+hr{
+    height: 5px !important;
+    background-color: #405952;
+    border-radius: 2px;
+}
+
+
+
+
+
+.floating_button,  .floating_new_list_button{
     position: absolute;
     bottom: -30px;
     right: 30px;
     overflow: auto;
 }
+
+
 
 .floating_view_button{
     position: absolute;
@@ -80,15 +99,8 @@ html {overflow-y: scroll}
     overflow: auto;
 }
 
-.list_dropdown_window{
-    text-align: center;
-}
 
-hr{
-    height: 5px !important;
-    background-color: #405952;
-    border-radius: 2px;
-}
+
 
 /*Styling for lists*/
 .completed_task{

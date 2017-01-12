@@ -207,7 +207,8 @@ function mainController($scope, $http){
             });
             $scope.lists[index] = $scope.current_list;
             currentListDetails($scope.current_list);
-            console.log($scope.current_list)
+            console.log($scope.current_list);
+
         }
 
 
@@ -299,7 +300,8 @@ function mainController($scope, $http){
         if(index >= 0){
             $scope.current_list.tasks[index].is_done ^=true;
             console.log("Change?" + $scope.current_list.tasks[index].is_done);
-            currentListDetails($scope.current_list)
+            currentListDetails($scope.current_list);
+            $scope.$apply();
         }
 
 
