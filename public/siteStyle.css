@@ -11,7 +11,6 @@ body{
 
 
 .tasks_lists_view{
-
     overflow: visible;
 }
 
@@ -20,22 +19,12 @@ body{
     font-size: xx-large !important;
 }
 
-.navigation_link, .mdl-layout__drawer-button{
-    color: #FFD393 !important;
-}
-
 .mdl-layout__header-row{
     background:rgba(64,89,82,0.5);
     /*background:#FFD393 ;
     background: linear-gradient(to right, #405952, #9C9B7A, #9C9B7A , #9C9B7A); */
 }
 
-/* ************* */
-
-.mdl-layout__drawer{
-    background:rgba(64,89,82,0.5)!important;
-    color: #FFD393 !important;
-}
 
 .mdl-navigation__link{
     color: black !important;
@@ -44,7 +33,9 @@ body{
 .task_window{
     overflow: visible;
     position: relative;
+    text-align: center;
 }
+
 
 .list_window{
     overflow: visible;
@@ -91,7 +82,6 @@ hr{
 }
 
 
-
 .floating_view_button{
     position: absolute;
     bottom: -30px;
@@ -100,7 +90,10 @@ hr{
 }
 
 
-
+#save_button{
+    background-color: #405952;
+    color: #FFD393;
+}
 
 /*Styling for lists*/
 .completed_task{

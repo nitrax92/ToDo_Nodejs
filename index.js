@@ -96,6 +96,7 @@ app.get('/api/todos', function (req, res) {
 // ************************** Angular Data Handling ****************************
 app.post('/api/list/savechanges', function (req, res) {
     console.log("Saving changes..");
+    var status = true;
 
     // req.body = list of objects.
 
@@ -122,6 +123,7 @@ app.post('/api/list/savechanges', function (req, res) {
         }
     }
 
+    res.json(status)
 });
 
 // Update a single task in a list.
@@ -144,7 +146,9 @@ function createNewList(list_object){
             tasks: list_object.tasks
         }, function (err, new_list_object) {
             if (err){
-                console.log(err)
+                console.log(err);
+                return false
+
             }
         }
     )
@@ -160,7 +164,8 @@ function updateList(list_object){
             timestamp_updated: list_object.timestamp_updated,
         }}, function (err, updated_list_object){
             if (err)
-                console.log(err)
+                console.log(err);
+                return false
         }
     )
 }
@@ -171,7 +176,8 @@ function deleteList(list_object){
         {_id: list_object._id},
         function (err, deleted_object) {
             if (err)
-                console.log(err)
+                console.log(err);
+                return false
         }
     )
 }
@@ -188,7 +194,6 @@ var cool = require('cool-ascii-faces');
 app.get('/', function (request, response) {
     response.send(cool())
 });
-
 
 
 app.listen(app.get('port'), function () {

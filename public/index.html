@@ -80,17 +80,9 @@
         <div class="mdl-layout__header-row">
             <!-- Title -->
             <div class="mdl-layout-spacer"></div>
-            <div class="mdl-layout-spacer mdl-layout--large-screen-only"></div>
-            <div class="mdl-layout-spacer mdl-layout--large-screen-only"></div>
-
             <span class="mdl-layout-title"><b>My To Do List</b></span>
             <!-- Add spacer, to align navigation to the right -->
-            <div class="mdl-layout-spacer mdl-layout--large-screen-only"></div>
             <div class="mdl-layout-spacer"></div>
-            <!-- Navigation -->
-            <nav class="mdl-navigation mdl-layout--large-screen-only">
-                <a class="mdl-navigation__link navigation_link" ng-click="saveChanges()" href="">Save Changes</a>
-            <a class="mdl-navigation__link navigation_link" ng-click="showList = !showList" href="">Change View</a>
         </nav>
     </div>
     </header>
@@ -101,12 +93,12 @@
     <main class="mdl-layout__content">
         <div class="mdl-grid center-items">
 
+
             <!-- ********************************************************************************** -->
             <!-- ********************************   TASKS WINDOW   ******************************** -->
             <!-- ********************************************************************************** -->
             <div class="view mdl-cell mdl-cell--8-col slide-left" ng-show="!showList">
                 <div class="mdl-grid">
-
                     <!-- Tasks Box -->
                     <div class="mdl-grid mdl-grid--no-spacing mdl-cell mdl-cell--12-col individual-window">
                         <div class="mdl-cell mdl-cell--12-col task-menu-item">
@@ -131,9 +123,9 @@
                         <div>
 
                             <h3><b>Tasks</b></h3>
-                            <div ng-repeat="task in current_list.tasks | filter: {is_done:false} | orderBy: 'is_done'" class="slide-down">
+                            <div ng-repeat="task in current_list.tasks | orderBy: 'is_done'" class="slide-down">
                                 <!-- Task is not set as done -->
-                                <div class="mdl-grid mdl-cell mdl-cell--12-col uncomplete_task" >
+                                <div class="mdl-grid mdl-cell mdl-cell--12-col uncomplete_task" ng-if="!task.is_done">
                                     <div class="cell mdl-cell--2-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
                                         <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="taskStatus(task)"><i class="material-icons">done</i></button>
                                     </div>
@@ -145,32 +137,36 @@
                                         <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="deleteTask(task)"><i class="material-icons">delete</i></button>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <hr ng-if="current_list_details.uncomplete_tasks!=0">
-                        <h3 ng-if="current_list_details.uncomplete_tasks!=0">Completed Tasks</h3>
-                        <div ng-repeat="task in current_list.tasks | filter: {is_done:true}" class="slide-down">
-                            <!-- Task is set as done -->
-                            <div class="mdl-grid mdl-cell mdl-cell--12-col completed_task">
 
-                                <div class="cell mdl-cell--2-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
-                                    <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="taskStatus(task)"><i class="material-icons">autorenew</i></button>
-                                </div>
-                                <div class="cell mdl-cell--8-col mdl-cell--4-col-tablet mdl-cell--2-col-phone task_description_text">
-                                    {{task.task}}
-                                </div>
 
-                                <div class="cell mdl-cell--2-col mdl-cell--2-col-tablet mdl-cell--1-col-phone" style="text-align: right;">
-                                    <button class="mdl-button mdl-js-button mdl-button--icon delete_button" ng-click="deleteTask(task)"><i class="material-icons">delete</i></button>
+
+                                <div class="mdl-grid mdl-cell mdl-cell--12-col completed_task" ng-if="task.is_done">
+                                    <div class="cell mdl-cell--2-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">
+                                        <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="taskStatus(task)"><i class="material-icons">autorenew</i></button>
+                                    </div>
+                                    <div class="cell mdl-cell--8-col mdl-cell--4-col-tablet mdl-cell--2-col-phone task_description_text">
+                                        {{task.task}}
+                                    </div>
+
+                                    <div class="cell mdl-cell--2-col mdl-cell--2-col-tablet mdl-cell--1-col-phone" style="text-align: right;">
+                                        <button class="mdl-button mdl-js-button mdl-button--icon delete_button" ng-click="deleteTask(task)"><i class="material-icons">delete</i></button>
+                                    </div>
                                 </div>
                             </div>
 
+
                         </div>
 
-                        <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--top" for=".delete_button">
-                            Delete this task
+                        <div>
+                            <button class="mdl-button mdl-js-button mdl-button--raised" ng-click="saveChanges()" id="save_button">
+                                <i class="material-icons">save</i> Save Changes
+                            </button>
+                            <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--top" for="save_button">
+                                Save the changes to the database.
+                            </div>
                         </div>
+
 
                         <div class="floating_button">
                             <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored show_new_task_modal_taskview" id="new_task_button_taskview">
@@ -183,7 +179,7 @@
 
                         <div class="floating_view_button">
                             <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" ng-click="list_dropdown_view = !list_dropdown_view" id="display_lists_button">
-                                <i ng-if="!list_dropdown_view" class="material-icons">arrow_downward</i>
+                                <i ng-if="!list_dropdown_view" class="material-icons">arrow_drop_down</i>
                                 <i ng-if="list_dropdown_view" class="material-icons">arrow_upward</i>
                             </button>
                             <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--top" for="display_lists_button">
@@ -247,6 +243,13 @@
         </div>
 
 
+        <!-- SNACKBAR -->
+        <div id="message_box" class="mdl-js-snackbar mdl-snackbar">
+            <div class="mdl-snackbar__text"></div>
+            <button class="mdl-snackbar__action" type="button"></button>
+        </div>
+
+
     </main>
 </div>
 
@@ -291,6 +294,15 @@
     new_list_dialog.querySelector('.close_list_modal').addEventListener('click', function() {
         new_list_dialog.close();
     });
+
+
+    function showMessage(message) {
+        var snackbarContainer = document.querySelector('#message_box');
+
+        var data = {message: message};
+        snackbarContainer.MaterialSnackbar.showSnackbar(data);
+
+    }
 
 </script>
 </html>

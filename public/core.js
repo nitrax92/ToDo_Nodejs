@@ -146,6 +146,7 @@ function mainController($scope, $http){
         $scope.myFormData = {};
         $scope.lists.push(listObject);
         $scope.uncomplete_lists = $scope.lists;
+        $scope.current_list =  listObject;
 
         console.log($scope.lists)
     };
@@ -181,10 +182,14 @@ function mainController($scope, $http){
 
         $http.post('/api/list/savechanges' , $scope.lists)
             .success(function (data) {
-                console.log("SaveChanges success.")
-        })
+                console.log("SaveChanges success.");
+                showMessage("Save successful");
+
+
+            })
             .error(function(data){
-                console.log(data)
+                console.log(data);
+                console.log("Fail?");
         });
     };
 
