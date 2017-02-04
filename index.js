@@ -19,7 +19,7 @@ var uristring =
     process.env.MONGODB_URI ||
     'mongodb://db_user:123qwe@ds151228.mlab.com:51228/heroku_gxxcx978';
 
-mongoose.Promise = global.Promise;
+
 mongoose.connect(uristring, function (err, res) {
     if (err) {
         console.log ('ERROR connecting to: ' + uristring + '. ' + err);
@@ -77,7 +77,7 @@ var ToDoLists = mongoose.model('Todo_lists',
 
 // API
 
-// Get all
+// Initial GET ALL request.
 app.get('/api/todos', function (req, res) {
     var data = {};
 
@@ -107,18 +107,14 @@ app.post('/api/list/savechanges', function (req, res) {
         current_list_object = req.body[i];
 
         if(req.body[i].is_local){
-            console.log("Local list found, create a new object in database.");
             createNewList(current_list_object)
-
         }
 
         // Delete all completed lists?
         else if(current_list_object.to_delete){
-            console.log("Delete complete or list that is set for deletion..")
             deleteList(current_list_object)
         }
         else{
-            console.log("EXISTING LIST");
             updateList(current_list_object)
         }
     }
@@ -126,17 +122,9 @@ app.post('/api/list/savechanges', function (req, res) {
     res.json(status)
 });
 
-// Update a single task in a list.
-function updateTasks(list_id, task_object){
-    console.log("Updating tasks.")
-}
-
-// Delete a single task from a list
-function deleteTask(list_id, task_id){
-
-}
 
 //Create new List entry.
+// TODO: Handle errors
 function createNewList(list_object){
     ToDoLists.create(
         {
@@ -186,15 +174,11 @@ function deleteList(list_object){
 
 
 // Application
+/*
 app.get('*', function (req,res) {
     res.sendfile('index.html')
 });
-
-var cool = require('cool-ascii-faces');
-app.get('/', function (request, response) {
-    response.send(cool())
-});
-
+*/
 
 app.listen(app.get('port'), function () {
     console.log('Node.js app is running on localhost:', app.get('port'))

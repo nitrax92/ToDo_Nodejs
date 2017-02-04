@@ -5,21 +5,11 @@
 var martinsToDo = angular.module('martinsTodo', ['ngAnimate']);
 
 function mainController($scope, $http){
-    $scope.formData = {};
+    /* Local Data */
     $scope.myFormData = {};
-
-    // All lists
     $scope.lists = {};
     $scope.current_list_index = 0;
     $scope.current_list_details = {percentage: 0, completed_tasks: 0, uncomplete_tasks: 0};
-
-
-
-
-
-
-
-
 
     function updateListStatus (list, status) {
         var index;
@@ -30,12 +20,8 @@ function mainController($scope, $http){
             }
         });
 
-
-        console.log(index);
         if (index >= 0)
             $scope.lists[index].is_complete = status;
-            //Mark list as updated by date.
-
     }
 
 
@@ -115,8 +101,6 @@ function mainController($scope, $http){
             $scope.current_list = data.lists[0];
 
 
-            console.log("***** Latest Index****");
-            console.log(lastUpdatedListIndex($scope.lists));
             var last_used_list = lastUpdatedListIndex($scope.lists);
             if(last_used_list){
                 $scope.current_list = data.lists[last_used_list];
@@ -141,21 +125,17 @@ function mainController($scope, $http){
 
     // ***************** Working with the local data ****************************
     $scope.addList = function () {
-        console.log("Adding List!!");
         var listObject = {list_name: $scope.myFormData.list_name, is_complete:false, timestamp_updated:Math.floor(Date.now() / 1000) , tasks: [], is_local:true};
         $scope.myFormData = {};
         $scope.lists.push(listObject);
         $scope.uncomplete_lists = $scope.lists;
         $scope.current_list =  listObject;
-
-        console.log($scope.lists)
     };
 
     $scope.changeList = function (list_object) {
         var index;
         $scope.lists.some(function(entry, i){
             if(entry == list_object){
-                console.log(entry.list_name);
                 index = i;
                 return true;
             }
@@ -164,15 +144,12 @@ function mainController($scope, $http){
         if(index >= 0){
             // Move array at index to position 0
             // Remove from the current positon
-            //$scope.lists.move($scope.lists, index, 0)
-
             $scope.lists = move($scope.lists, index, 0);
             $scope.current_list = $scope.lists[0];
             $scope.lists[0].timestamp_updated = Math.floor(Date.now() / 1000);
             console.log($scope.current_list);
 
             currentListDetails($scope.current_list);
-            //console.log($scope.current_list.list_name);
         }
     };
 
@@ -182,14 +159,12 @@ function mainController($scope, $http){
 
         $http.post('/api/list/savechanges' , $scope.lists)
             .success(function (data) {
-                console.log("SaveChanges success.");
                 showMessage("Save successful");
 
 
             })
             .error(function(data){
                 console.log(data);
-                console.log("Fail?");
         });
     };
 
@@ -200,30 +175,22 @@ function mainController($scope, $http){
             $scope.myFormData = {};
             $scope.current_list.tasks.push(task_object);
 
-            // Edit existing list object to match updated current_list
-            //$scope.lists.find({list_name: current_list.list_name});
             var index;
             $scope.lists.some(function(entry, i){
                 if(entry == $scope.current_list){
-                    console.log(entry.list_name);
                     index = i;
                     return true;
                 }
             });
+
             $scope.lists[index] = $scope.current_list;
             currentListDetails($scope.current_list);
-            console.log($scope.current_list);
 
         }
 
 
     };
 
-    $scope.dateTest = function(){
-      console.log("********************* DATE TEST ******************************");
-      $scope.date = new Date();
-      console.log(Date.parse(s))
-    };
 
     $scope.deleteTask = function (task) {
         var index;
@@ -235,8 +202,6 @@ function mainController($scope, $http){
             }
         });
 
-
-        console.log(index);
         if (index >= 0)
             $scope.current_list.tasks.splice(index, 1);
             currentListDetails($scope.current_list)
@@ -279,18 +244,6 @@ function mainController($scope, $http){
 
     };
 
-
-    $scope.mdlScaling = function(Listview){
-        // Listview is a boolean,
-        if(Listview){
-            return "mdl-cell--8-col"
-        }
-        else{
-            return "mdl-cell-12-col"
-        }
-    };
-
-
     
     $scope.taskStatus = function (task) {
         var index;
@@ -304,7 +257,6 @@ function mainController($scope, $http){
 
         if(index >= 0){
             $scope.current_list.tasks[index].is_done ^=true;
-            console.log("Change?" + $scope.current_list.tasks[index].is_done);
             currentListDetails($scope.current_list);
             $scope.$apply();
         }
@@ -313,5 +265,19 @@ function mainController($scope, $http){
     };
 
     // **********************************************************************************
+
+
+    // Unused. Intended for changing between task window and lists + task window.
+    $scope.mdlScaling = function(Listview){
+        // Listview is a boolean,
+        if(Listview){
+            return "mdl-cell--8-col"
+        }
+        else{
+            return "mdl-cell-12-col"
+        }
+    };
+
+
 }
 
